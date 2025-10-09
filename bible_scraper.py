@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 import logging
 from typing import Dict, List, Any, Optional
 import re
+import copy
 
 # Configure logging
 logging.basicConfig(
@@ -180,16 +181,16 @@ class BibleScraper:
             
             # Initialize verse tracking
             current_heading = None
-            verse_updates = {}
+            verse_updates = []
             
             # Get verses container
             passage_content = soup.find(class_='passage-content')
             if not passage_content:
                 logging.error("Could not find passage-content")
-                return {}
+                return []
                 
             # Debug HTML structure
-            logging.debug(f"HTML structure:\n{passage_content.prettify()}")
+            #logging.debug(f"HTML structure:\n{passage_content.prettify()}")
             
             # Get verses container - try different class names
             verses_container = passage_content.find(class_='text-html') or passage_content
@@ -226,7 +227,7 @@ class BibleScraper:
             if not version_div:
                 version_div = passage_content
             
-            verse_updates = {}
+            verse_updates = []
             current_heading = None
             
             # Process all elements to collect verses and headings
@@ -240,24 +241,41 @@ class BibleScraper:
                 if element.name == 'p':
                     # Find all verse spans within the paragraph
                     verse_spans = element.find_all(class_='text')
+                    logging.debug(f"Found {len(verse_spans)} verse spans in paragraph")
                     for verse_span in verse_spans:
+                        logging.debug(f"Verse span HTML: {verse_span.prettify()}")
                         # Process verse text and references
                         verse_text = ''
                         verse_footnotes = []
                         verse_cross_refs = []
                         
-                        verse_id = verse_span.get('id', '')
-                        if not verse_id:
-                            continue
+                        # Get verse number from versenum or chapternum
+                        verse_num = None
+                        verse_text = ''
                         
-                        # Extract verse number from span id (format: "en-ESV-1234")
-                        verse_num = verse_id.split('-')[-1]
-                        if not verse_num:
-                            continue
+                        # Check for chapter number first (if present, this is verse 1)
+                        chapternum = verse_span.find('span', class_='chapternum')
+                        if chapternum:
+                            verse_num = "1"
+                        else:
+                            versenum = verse_span.find('sup', class_='versenum')
+                            if versenum:
+                                verse_num = versenum.get_text(strip=True)
                         
-                        # Get all text nodes directly, this gives us the verse text
-                        for text in verse_span.find_all(text=True, recursive=False):
-                            verse_text += text.strip() + ' '
+                        # Remove all excluded elements from original verse span, replacing with spaces
+                        for element in verse_span.find_all(['span', 'sup']):
+                            if (element.get('class') and 
+                                any(c in ['crossreference', 'footnote', 'chapternum', 'versenum'] 
+                                    for c in element.get('class', []))):
+                                # Replace element with a space
+                                element.replace_with(' ')
+                        
+                        # Get text and clean up spaces
+                        verse_text = verse_span.get_text()  # Don't strip yet to preserve spaces
+                        # Replace all whitespace sequences (including newlines, tabs) with a single space
+                        verse_text = re.sub(r'\s+', ' ', verse_text)
+                        # Now strip and ensure no leading/trailing spaces
+                        verse_text = verse_text.strip()
                         
                         # Process footnotes and cross-references separately
                         for sup in verse_span.find_all('sup'):
@@ -271,13 +289,19 @@ class BibleScraper:
                                     if cr_id and cr_id in cross_refs:
                                         verse_cross_refs.extend(cross_refs[cr_id])
                         
-                        # Skip empty verses
+                        # Clean up verse text
                         verse_text = verse_text.strip()
                         if not verse_text:
-                            logging.warning(f"Empty verse text found for {book} {chapter}:{verse_num}")
+                            logging.warning(f"Empty verse text found for {book} {chapter}")
+                            continue
+                            
+                        # Verify we got a verse number
+                        if verse_num is None:
+                            logging.error(f"No verse number found for text in {book} {chapter}: {verse_text}")
                             continue
                         
-                        verse_updates[verse_num] = {
+                        verse_updates.append({
+                            "verse": verse_num,
                             "heading": current_heading,
                             "text": verse_text,
                             "footnotes": verse_footnotes,
@@ -285,15 +309,15 @@ class BibleScraper:
                                 "refers_to": verse_cross_refs,
                                 "refers_me": []
                             }
-                        }
-                        logging.debug(f"Verse text: {verse_text}")
+                        })
+                        logging.debug(f"Verse {verse_num}: {verse_text}")
                         current_heading = None  # Clear heading after using it
             
             return verse_updates
             
         except requests.RequestException as e:
             logging.error(f"Error fetching {book} {chapter}: {str(e)}")
-            return {}
+            return []
 
     def process_reverse_references(self):
         """Process reverse references (refers_me) for all verses."""
@@ -342,8 +366,6 @@ class BibleScraper:
         # Scrape each chapter
         for book in self.template["books"]:
             book_name = book["book"]
-            if book_name != "Genesis":
-                continue # this is for testing only, this is not a mistake
             logging.info(f"Processing {book_name}...")
             
             for chapter in book["chapters"]:
@@ -352,14 +374,20 @@ class BibleScraper:
                 
                 # Get chapter content
                 verse_updates = self.get_chapter_content(book_name, chapter_num)
-                
+                if verse_updates is None:
+                    logging.error(f"No verse updates returned for {book_name} {chapter_num}")
+                    verse_updates = []
+                    
                 # Update verses with scraped content
-                for verse in chapter["verses"]:
-                    verse_num = str(verse["verse"])
-                    if verse_num in verse_updates:
-                        verse.update(verse_updates[verse_num])
-                
+                for verse_update in verse_updates:
+                    verse_num = verse_update.pop('verse')  # Remove verse number from update data
+                    for verse in chapter["verses"]:
+                        if str(verse["verse"]) == verse_num:
+                            verse.update(verse_update)
+                            break
                 time.sleep(1)  # Be nice to the server
+                break # For testing, remove this break to process all chapters
+            break # this is for testing only, this is not a mistake
 
         # Process refers_me references
         logging.info("Processing reverse references...")
