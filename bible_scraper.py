@@ -109,24 +109,27 @@ class BibleScraper:
             
             # Find version information and copyright notice
             copyright_div = soup.find('div', class_='publisher-info-bottom')
-            copyright_text = copyright_div.get_text(strip=True) if copyright_div else ""
+            copyright_text = ""
+            name = self.version
             
-            # Try to find full name from version select
-            version_select = soup.find('select', {'class': 'version-select'})
-            selected_option = version_select.find('option', selected=True) if version_select else None
-            
-            # For ESV, we know it's "English Standard Version"
-            if self.version == "ESV":
-                name = "English Standard Version"
-                initials = "ESV"
-            else:
-                name = selected_option.text.strip() if selected_option else self.version
-                initials = self.version
+            if copyright_div:
+                # Get version name from the <strong><a> structure
+                strong_tag = copyright_div.find('strong')
+                if strong_tag:
+                    a_tag = strong_tag.find('a')
+                    if a_tag:
+                        name = a_tag.get_text(strip=True)
+                
+                # Get copyright text from <p>
+                p_element = copyright_div.find('p')
+                if p_element:
+                    copyright_text = p_element.get_text(strip=True)
+            initials = self.version
             
             # Look for year in copyright notice first
             year = ""
             if copyright_text:
-                year_match = re.search(r'\b(19\d{2}|20\d{2})\b', copyright_text)
+                year_match = re.search(r'\b(18\d{2}|19\d{2}|20\d{2})\b', copyright_text)
                 if year_match:
                     year = year_match.group(1)
             
@@ -218,8 +221,8 @@ class BibleScraper:
                             cross_refs[cr_id] = refs
             
             # Process verses and headings
-            # The .version-ESV div contains all verses in .text spans
-            version_div = passage_content.find(class_='version-ESV')
+            # The .version-{version} div contains all verses in .text spans
+            version_div = passage_content.find(class_=f'version-{self.version}')
             if not version_div:
                 version_div = passage_content
             
@@ -252,30 +255,37 @@ class BibleScraper:
                 if not verse_num:
                     continue
                 
-                # Process the text content
-                for content in verse_span:
-                    if isinstance(content, str):
-                        # Skip verse numbers that appear as text
-                        if not re.match(r'^\s*\d+\s*$', content):
+                # Get verse text without the heading
+                text_start = None
+                for idx, content in enumerate(verse_span):
+                    # Skip verse number at start
+                    if isinstance(content, str) and re.match(r'^\s*\d+\s*$', content):
+                        text_start = idx + 1
+                        break
+                    elif hasattr(content, 'name') and content.name == 'sup' and content.get('class') and 'versenum' in content.get('class'):
+                        text_start = idx + 1
+                        break
+                
+                if text_start is not None:
+                    # Process the text content after the verse number
+                    for content in list(verse_span)[text_start:]:
+                        if isinstance(content, str):
                             verse_text += content.strip() + ' '
-                    elif hasattr(content, 'name'):
-                        if content.name == 'sup':
-                            # Skip verse number sups
-                            if content.get('class') and 'versenum' in content.get('class'):
-                                continue
-                            # Check for footnote
-                            elif content.get('class') and 'footnote' in content.get('class'):
-                                fn_id = content.get('data-fn')
-                                if fn_id and fn_id in footnotes:
-                                    verse_footnotes.append(footnotes[fn_id])
-                            # Check for cross reference
-                            elif content.get('class') and 'crossreference' in content.get('class'):
-                                cr_id = content.get('data-cr')
-                                if cr_id and cr_id in cross_refs:
-                                    verse_cross_refs.extend(cross_refs[cr_id])
-                        else:
-                            # For other elements, just get their text
-                            verse_text += content.get_text().strip() + ' '
+                        elif hasattr(content, 'name'):
+                            if content.name == 'sup':
+                                # Check for footnote
+                                if content.get('class') and 'footnote' in content.get('class'):
+                                    fn_id = content.get('data-fn')
+                                    if fn_id and fn_id in footnotes:
+                                        verse_footnotes.append(footnotes[fn_id])
+                                # Check for cross reference
+                                elif content.get('class') and 'crossreference' in content.get('class'):
+                                    cr_id = content.get('data-cr')
+                                    if cr_id and cr_id in cross_refs:
+                                        verse_cross_refs.extend(cross_refs[cr_id])
+                            else:
+                                # For other elements, just get their text
+                                verse_text += content.get_text().strip() + ' '
                     
                 # Skip empty verses
                 verse_text = verse_text.strip()
@@ -364,8 +374,7 @@ class BibleScraper:
                         verse.update(verse_updates[verse_num])
                 
                 time.sleep(1)  # Be nice to the server
-            break # temporary for tessting one book, not a mistake
-        
+
         # Process refers_me references
         logging.info("Processing reverse references...")
         self.process_reverse_references()
