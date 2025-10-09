@@ -1,0 +1,175 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "initials": {
+            "type": "string"
+        },
+        "version": {
+            "type": "string"
+        },
+        "citation": {
+            "type": ["null","string"]
+        },
+        "books": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "book": {
+                        "type": "string"
+                    },
+                    "book_sequence": {
+                        "type": "integer"
+                    },
+                    "testament": {
+                        "type": "string"
+                    },
+                    "names": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "num_chapters": {
+                        "type": "integer"
+                    },
+                    "chapters": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "chapter": {
+                                    "type": "integer"
+                                },
+                                "chapter_sequence": {
+                                    "type": "integer"
+                                },
+                                "num_verses": {
+                                    "type": "integer"
+                                },
+                                "verses": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "heading": {
+                                                "type": [
+                                                    "null",
+                                                    "string"
+                                                ]
+                                            },
+                                            "verse_sequence": {
+                                                "type": "integer"
+                                            },
+                                            "verse": {
+                                                "type": "integer"
+                                            },
+                                            "text": {
+                                                "type": [
+                                                    "null",
+                                                    "string"
+                                                ]
+                                            },
+                                            "cross_references": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "refers_to": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "book": {
+                                                                    "type": "string"
+                                                                },
+                                                                "chapter": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "verse": {
+                                                                    "type": "integer"
+                                                                }
+                                                            },
+                                                            "required": [
+                                                                "book",
+                                                                "chapter",
+                                                                "verse"
+                                                            ]
+                                                        }
+                                                    },
+                                                    "refers_me": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "book": {
+                                                                    "type": "string"
+                                                                },
+                                                                "chapter": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "verse": {
+                                                                    "type": "integer"
+                                                                }
+                                                            },
+                                                            "required": [
+                                                                "book",
+                                                                "chapter",
+                                                                "verse"
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                "required": [
+                                                    "refers_me",
+                                                    "refers_to"
+                                                ]
+                                            },
+                                            "footnotes": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "required": [
+                                            "cross_references",
+                                            "footnotes",
+                                            "heading",
+                                            "text",
+                                            "verse",
+                                            "verse_sequence"
+                                        ]
+                                    }
+                                }
+                            },
+                            "required": [
+                                "chapter",
+                                "chapter_sequence",
+                                "num_verses",
+                                "verses"
+                            ]
+                        }
+                    }
+                },
+                "required": [
+                    "book",
+                    "book_sequence",
+                    "chapters",
+                    "names",
+                    "num_chapters",
+                    "testament"
+                ]
+            }
+        }
+    },
+    "required": [
+        "books",
+        "citation",
+        "initials",
+        "name",
+        "version"
+    ]
+}
