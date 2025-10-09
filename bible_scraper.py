@@ -1,0 +1,405 @@
+import argparse
+import json
+import time
+import requests
+from bs4 import BeautifulSoup
+import logging
+from typing import Dict, List, Any, Optional
+import re
+
+# Configure logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+def parse_bible_reference(ref_text: str) -> List[Dict[str, str]]:
+    """Parse bible references including ranges and multiple references."""
+    refs = []
+    # Split multiple references
+    for ref in ref_text.split(','):
+        ref = ref.strip()
+        if not ref:
+            continue
+            
+        # Handle ranges (e.g., "Habakkuk 1:3-Habakkuk 1:5" or "Habakkuk 1:3-5")
+        if '-' in ref:
+            start, end = ref.split('-')
+            start = start.strip()
+            end = end.strip()
+            
+            # Parse start reference
+            parts = start.rsplit(' ', 1)
+            if len(parts) != 2 or ':' not in parts[1]:
+                continue
+            book = parts[0]
+            start_chapter, start_verse = parts[1].split(':')
+            
+            # Parse end reference
+            if ' ' in end:  # Full reference ("Habakkuk 1:5")
+                parts = end.rsplit(' ', 1)
+                if len(parts) != 2 or ':' not in parts[1]:
+                    continue
+                end_chapter, end_verse = parts[1].split(':')
+            else:  # Just chapter:verse ("5") or verse ("5")
+                if ':' in end:
+                    end_chapter, end_verse = end.split(':')
+                else:
+                    end_chapter = start_chapter
+                    end_verse = end
+            
+            # Add all verses in the range
+            if start_chapter == end_chapter:
+                for v in range(int(start_verse), int(end_verse) + 1):
+                    refs.append({
+                        "book": book,
+                        "chapter": start_chapter,
+                        "verse": str(v)
+                    })
+            else:
+                # For now, just add start and end verses if chapters differ
+                refs.append({
+                    "book": book,
+                    "chapter": start_chapter,
+                    "verse": start_verse
+                })
+                refs.append({
+                    "book": book,
+                    "chapter": end_chapter,
+                    "verse": end_verse
+                })
+        else:
+            # Single reference
+            parts = ref.rsplit(' ', 1)
+            if len(parts) != 2 or ':' not in parts[1]:
+                continue
+            book = parts[0]
+            chapter, verse = parts[1].split(':')
+            refs.append({
+                "book": book,
+                "chapter": chapter,
+                "verse": verse
+            })
+    
+    return refs
+
+class BibleScraper:
+    def __init__(self, version: str, template_path: str):
+        self.version = version
+        self.base_url = "https://www.biblegateway.com/passage/"
+        self.session = requests.Session()
+        self.session.headers.update({
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        })
+        
+        # Load the template
+        with open(template_path, 'r', encoding='utf-8') as f:
+            self.template = json.load(f)
+            
+    def _get_version_info(self) -> Dict[str, str]:
+        """Get information about the Bible version."""
+        try:
+            # Get the Genesis 1 page to find citation
+            response = self.session.get(self.base_url, params={
+                'search': 'Genesis 1',
+                'version': self.version
+            })
+            response.raise_for_status()
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            # Find version information and copyright notice
+            copyright_div = soup.find('div', class_='publisher-info-bottom')
+            copyright_text = copyright_div.get_text(strip=True) if copyright_div else ""
+            
+            # Try to find full name from version select
+            version_select = soup.find('select', {'class': 'version-select'})
+            selected_option = version_select.find('option', selected=True) if version_select else None
+            
+            # For ESV, we know it's "English Standard Version"
+            if self.version == "ESV":
+                name = "English Standard Version"
+                initials = "ESV"
+            else:
+                name = selected_option.text.strip() if selected_option else self.version
+                initials = self.version
+            
+            # Look for year in copyright notice first
+            year = ""
+            if copyright_text:
+                year_match = re.search(r'\b(19\d{2}|20\d{2})\b', copyright_text)
+                if year_match:
+                    year = year_match.group(1)
+            
+            # Get citation from copyright div
+            citation = None
+            if copyright_text:
+                citation = copyright_text
+            
+            if not citation:
+                # Construct citation
+                citation = f"Scripture quotations taken from the {name}"
+                if year:
+                    citation += f" ({year})"
+                citation += "."
+            
+            return {
+                "name": name.strip(),
+                "initials": initials.strip(),
+                "version": year,
+                "citation": citation
+            }
+            
+        except requests.RequestException as e:
+            logging.error(f"Error fetching version info: {str(e)}")
+            return {
+                "name": f"{self.version} Bible",
+                "initials": self.version,
+                "version": "",
+                "citation": f"Scripture quotations taken from the {self.version} Bible."
+            }
+
+    def get_chapter_content(self, book: str, chapter: int) -> Dict[str, Any]:
+        """Scrape a single chapter from Bible Gateway."""
+        params = {
+            'search': f"{book} {chapter}",
+            'version': self.version
+        }
+        
+        try:
+            response = self.session.get(self.base_url, params=params)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            # Save HTML for debugging
+            if chapter == 1:
+                with open('debug_output.html', 'w', encoding='utf-8') as f:
+                    f.write(soup.prettify())
+            
+            # Initialize verse tracking
+            current_heading = None
+            verse_updates = {}
+            
+            # Get verses container
+            passage_content = soup.find(class_='passage-content')
+            if not passage_content:
+                logging.error("Could not find passage-content")
+                return {}
+                
+            # Debug HTML structure
+            logging.debug(f"HTML structure:\n{passage_content.prettify()}")
+            
+            # Get verses container - try different class names
+            verses_container = passage_content.find(class_='text-html') or passage_content
+                
+            # Find all footnotes and cross references for lookup
+            footnotes = {}
+            footnotes_div = soup.find('div', class_='footnotes')
+            if footnotes_div:
+                for fn in footnotes_div.find_all('li'):
+                    fn_id = fn.get('id')
+                    if fn_id and fn_id.startswith('fen-'):
+                        text_span = fn.find('span', {'class': 'footnote-text'})
+                        if text_span:
+                                footnotes[fn_id] = text_span.get_text(strip=True)
+            
+            cross_refs = {}
+            crossrefs_div = soup.find('div', class_='crossrefs')
+            if crossrefs_div:
+                for cr in crossrefs_div.find_all('li'):
+                    cr_id = cr.get('id')
+                    if cr_id and cr_id.startswith('cen-'):
+                        ref_links = cr.find_all('a', {'class': 'crossref-link'})
+                        refs = []
+                        for link in ref_links:
+                            bibleref = link.get('data-bibleref')
+                            if bibleref:
+                                refs.extend(parse_bible_reference(bibleref))
+                        if refs:
+                            cross_refs[cr_id] = refs
+            
+            # Process verses and headings
+            # The .version-ESV div contains all verses in .text spans
+            version_div = passage_content.find(class_='version-ESV')
+            if not version_div:
+                version_div = passage_content
+            
+            verse_updates = {}
+            current_heading = None
+            
+            # Process all elements to collect verse spans and headings
+            for element in version_div.find_all(['h3', 'h4', 'span']):
+                # Process headings
+                if element.name in ['h3', 'h4']:
+                    current_heading = element.get_text(strip=True)
+                    continue
+                    
+                # Skip non-verse spans
+                if 'text' not in element.get('class', []):
+                    continue
+                    
+                verse_span = element
+                # Process verse text and references
+                verse_text = ''
+                verse_footnotes = []
+                verse_cross_refs = []
+                
+                verse_id = verse_span.get('id', '')
+                if not verse_id:
+                    continue
+                    
+                # Extract verse number from span id (format: "en-ESV-1234")
+                verse_num = verse_id.split('-')[-1]
+                if not verse_num:
+                    continue
+                
+                # Process the text content
+                for content in verse_span:
+                    if isinstance(content, str):
+                        # Skip verse numbers that appear as text
+                        if not re.match(r'^\s*\d+\s*$', content):
+                            verse_text += content.strip() + ' '
+                    elif hasattr(content, 'name'):
+                        if content.name == 'sup':
+                            # Skip verse number sups
+                            if content.get('class') and 'versenum' in content.get('class'):
+                                continue
+                            # Check for footnote
+                            elif content.get('class') and 'footnote' in content.get('class'):
+                                fn_id = content.get('data-fn')
+                                if fn_id and fn_id in footnotes:
+                                    verse_footnotes.append(footnotes[fn_id])
+                            # Check for cross reference
+                            elif content.get('class') and 'crossreference' in content.get('class'):
+                                cr_id = content.get('data-cr')
+                                if cr_id and cr_id in cross_refs:
+                                    verse_cross_refs.extend(cross_refs[cr_id])
+                        else:
+                            # For other elements, just get their text
+                            verse_text += content.get_text().strip() + ' '
+                    
+                # Skip empty verses
+                verse_text = verse_text.strip()
+                if not verse_text:
+                    logging.warning(f"Empty verse text found for {book} {chapter}:{verse_num}")
+                    continue
+                
+                verse_updates[verse_num] = {
+                    "heading": current_heading,
+                    "text": verse_text,
+                    "footnotes": verse_footnotes,
+                    "cross_references": {
+                        "refers_to": verse_cross_refs,
+                        "refers_me": []
+                    }
+                }
+                logging.debug(f"Verse text: {verse_text}")
+                current_heading = None  # Clear heading after using it
+            
+            return verse_updates
+            
+        except requests.RequestException as e:
+            logging.error(f"Error fetching {book} {chapter}: {str(e)}")
+            return {}
+
+    def process_reverse_references(self):
+        """Process reverse references (refers_me) for all verses."""
+        # First, build an index of all verses for faster lookup
+        verse_index = {}
+        for book in self.template["books"]:
+            book_name = book["book"]
+            for chapter in book["chapters"]:
+                chapter_num = chapter["chapter"]
+                for verse in chapter["verses"]:
+                    verse_num = verse["verse"]
+                    key = f"{book_name} {chapter_num}:{verse_num}"
+                    verse_index[key] = verse
+
+        # Process all refers_to to build refers_me
+        for book in self.template["books"]:
+            book_name = book["book"]
+            for chapter in book["chapters"]:
+                chapter_num = chapter["chapter"]
+                for verse in chapter["verses"]:
+                    verse_num = verse["verse"]
+                    if not verse.get("cross_references"):
+                        continue
+                        
+                    source_ref = {
+                        "book": book_name,
+                        "chapter": str(chapter_num),
+                        "verse": str(verse_num)
+                    }
+                    
+                    # Add this verse as refers_me to all verses it refers to
+                    for ref in verse["cross_references"].get("refers_to", []):
+                        target_key = f"{ref['book']} {ref['chapter']}:{ref['verse']}"
+                        if target_key in verse_index:
+                            target_verse = verse_index[target_key]
+                            if not target_verse.get("cross_references"):
+                                target_verse["cross_references"] = {"refers_to": [], "refers_me": []}
+                            target_verse["cross_references"]["refers_me"].append(source_ref)
+
+    def scrape_bible(self) -> Dict[str, Any]:
+        """Scrape the entire Bible for the specified version."""
+        # Get version information
+        version_info = self._get_version_info()
+        self.template.update(version_info)
+        
+        # Scrape each chapter
+        for book in self.template["books"]:
+            book_name = book["book"]
+            logging.info(f"Processing {book_name}...")
+            
+            for chapter in book["chapters"]:
+                chapter_num = chapter["chapter"]
+                logging.info(f"  Scraping {book_name} {chapter_num}...")
+                
+                # Get chapter content
+                verse_updates = self.get_chapter_content(book_name, chapter_num)
+                
+                # Update verses with scraped content
+                for verse in chapter["verses"]:
+                    verse_num = str(verse["verse"])
+                    if verse_num in verse_updates:
+                        verse.update(verse_updates[verse_num])
+                
+                time.sleep(1)  # Be nice to the server
+            break # temporary for tessting one book, not a mistake
+        
+        # Process refers_me references
+        logging.info("Processing reverse references...")
+        self.process_reverse_references()
+        
+        return self.template
+
+def main():
+    parser = argparse.ArgumentParser(description="Scrape Bible Gateway for Bible text and references")
+    parser.add_argument("version", help="Bible version abbreviation (e.g., NIV, ESV, KJV)")
+    parser.add_argument("template", help="Path to the template JSON file")
+    parser.add_argument("output", help="Output JSON file path")
+    args = parser.parse_args()
+
+    scraper = BibleScraper(args.version, args.template)
+    bible_data = scraper.scrape_bible()
+
+    with open(args.output, 'w', encoding='utf-8') as f:
+        json.dump(bible_data, f, ensure_ascii=False, indent=2)
+    
+    logging.info(f"Bible successfully scraped and saved to {args.output}")
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+# citation is in a special element at bottom of page, use Genesis 1 for citation, element with @publisher-info-bottom, citation is in the <p> element inside it
+# if not found in translation name, use publication year in citation for version
+# cross references have full addresses, and might list several, and might list ranges. Genesis 1:1, Habbakuk 1:1, Habbakuk 1:3-Habbakuk 1:5
+# it is much easier than this llm thinks to parse references.
+# footnotes and cross references are embedded in the verse text: 
+# <sup class="crossreference" data-cr="<id of crossreference element>" , <sup class="footnote" data-fn="<id of footnote element>"
+# those footnote and cross reference elements are li elements
+# footnotes have a @footnote-text span inside them
+# cross references have an @crossref-link element, and that element has a data-bibleref attribute with the reference text
+# reference text is like this: Genesis 1:1, Habbakuk 1:1, Habbakuk 1:3-Habbakuk 1:5
