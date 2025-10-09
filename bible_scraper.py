@@ -221,7 +221,7 @@ class BibleScraper:
                             cross_refs[cr_id] = refs
             
             # Process verses and headings
-            # The .version-{version} div contains all verses in .text spans
+            # The .version-{version} div contains all verses in <p> tags, with <h3> for headings
             version_div = passage_content.find(class_=f'version-{self.version}')
             if not version_div:
                 version_div = passage_content
@@ -229,81 +229,65 @@ class BibleScraper:
             verse_updates = {}
             current_heading = None
             
-            # Process all elements to collect verse spans and headings
-            for element in version_div.find_all(['h3', 'h4', 'span']):
+            # Process all elements to collect verses and headings
+            for element in version_div.find_all(['h3', 'p']):
                 # Process headings
-                if element.name in ['h3', 'h4']:
+                if element.name == 'h3':
                     current_heading = element.get_text(strip=True)
                     continue
-                    
-                # Skip non-verse spans
-                if 'text' not in element.get('class', []):
-                    continue
-                    
-                verse_span = element
-                # Process verse text and references
-                verse_text = ''
-                verse_footnotes = []
-                verse_cross_refs = []
                 
-                verse_id = verse_span.get('id', '')
-                if not verse_id:
-                    continue
-                    
-                # Extract verse number from span id (format: "en-ESV-1234")
-                verse_num = verse_id.split('-')[-1]
-                if not verse_num:
-                    continue
-                
-                # Get verse text without the heading
-                text_start = None
-                for idx, content in enumerate(verse_span):
-                    # Skip verse number at start
-                    if isinstance(content, str) and re.match(r'^\s*\d+\s*$', content):
-                        text_start = idx + 1
-                        break
-                    elif hasattr(content, 'name') and content.name == 'sup' and content.get('class') and 'versenum' in content.get('class'):
-                        text_start = idx + 1
-                        break
-                
-                if text_start is not None:
-                    # Process the text content after the verse number
-                    for content in list(verse_span)[text_start:]:
-                        if isinstance(content, str):
-                            verse_text += content.strip() + ' '
-                        elif hasattr(content, 'name'):
-                            if content.name == 'sup':
-                                # Check for footnote
-                                if content.get('class') and 'footnote' in content.get('class'):
-                                    fn_id = content.get('data-fn')
+                # Process verse paragraphs
+                if element.name == 'p':
+                    # Find all verse spans within the paragraph
+                    verse_spans = element.find_all(class_='text')
+                    for verse_span in verse_spans:
+                        # Process verse text and references
+                        verse_text = ''
+                        verse_footnotes = []
+                        verse_cross_refs = []
+                        
+                        verse_id = verse_span.get('id', '')
+                        if not verse_id:
+                            continue
+                        
+                        # Extract verse number from span id (format: "en-ESV-1234")
+                        verse_num = verse_id.split('-')[-1]
+                        if not verse_num:
+                            continue
+                        
+                        # Get all text nodes directly, this gives us the verse text
+                        for text in verse_span.find_all(text=True, recursive=False):
+                            verse_text += text.strip() + ' '
+                        
+                        # Process footnotes and cross-references separately
+                        for sup in verse_span.find_all('sup'):
+                            if sup.get('class'):
+                                if 'footnote' in sup.get('class'):
+                                    fn_id = sup.get('data-fn')
                                     if fn_id and fn_id in footnotes:
                                         verse_footnotes.append(footnotes[fn_id])
-                                # Check for cross reference
-                                elif content.get('class') and 'crossreference' in content.get('class'):
-                                    cr_id = content.get('data-cr')
+                                elif 'crossreference' in sup.get('class'):
+                                    cr_id = sup.get('data-cr')
                                     if cr_id and cr_id in cross_refs:
                                         verse_cross_refs.extend(cross_refs[cr_id])
-                            else:
-                                # For other elements, just get their text
-                                verse_text += content.get_text().strip() + ' '
-                    
-                # Skip empty verses
-                verse_text = verse_text.strip()
-                if not verse_text:
-                    logging.warning(f"Empty verse text found for {book} {chapter}:{verse_num}")
-                    continue
-                
-                verse_updates[verse_num] = {
-                    "heading": current_heading,
-                    "text": verse_text,
-                    "footnotes": verse_footnotes,
-                    "cross_references": {
-                        "refers_to": verse_cross_refs,
-                        "refers_me": []
-                    }
-                }
-                logging.debug(f"Verse text: {verse_text}")
-                current_heading = None  # Clear heading after using it
+                        
+                        # Skip empty verses
+                        verse_text = verse_text.strip()
+                        if not verse_text:
+                            logging.warning(f"Empty verse text found for {book} {chapter}:{verse_num}")
+                            continue
+                        
+                        verse_updates[verse_num] = {
+                            "heading": current_heading,
+                            "text": verse_text,
+                            "footnotes": verse_footnotes,
+                            "cross_references": {
+                                "refers_to": verse_cross_refs,
+                                "refers_me": []
+                            }
+                        }
+                        logging.debug(f"Verse text: {verse_text}")
+                        current_heading = None  # Clear heading after using it
             
             return verse_updates
             
@@ -358,6 +342,8 @@ class BibleScraper:
         # Scrape each chapter
         for book in self.template["books"]:
             book_name = book["book"]
+            if book_name != "Genesis":
+                continue # this is for testing only, this is not a mistake
             logging.info(f"Processing {book_name}...")
             
             for chapter in book["chapters"]:
