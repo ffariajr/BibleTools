@@ -274,6 +274,9 @@ class BibleScraper:
                         verse_text = verse_span.get_text()  # Don't strip yet to preserve spaces
                         # Replace all whitespace sequences (including newlines, tabs) with a single space
                         verse_text = re.sub(r'\s+', ' ', verse_text)
+                        # Normalize quotes
+                        verse_text = re.sub(u'[\u201c\u201d\u201f]', '"', verse_text)  # Smart double quotes
+                        verse_text = re.sub(u'[\u2018\u2019\u201b]', "'", verse_text)  # Smart single quotes
                         # Now strip and ensure no leading/trailing spaces
                         verse_text = verse_text.strip()
                         
