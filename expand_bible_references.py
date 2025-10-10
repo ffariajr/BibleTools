@@ -340,8 +340,8 @@ def process_text(text: str, bible_data: dict, after_paragraph: bool, verse_limit
         else:
             # Insert verse text right after the reference
             # Check if we need spaces around the verse text
-            needs_space_before = result[end:end + 1].strip() != ''
-            needs_space_after = result[end:end + 1].strip() != ''
+            needs_space_before = result[start:start + 1] != ' '
+            needs_space_after = result[end:end + 1] != ' '
             
             result = (
                 result[:end] +
