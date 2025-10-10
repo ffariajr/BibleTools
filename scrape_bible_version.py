@@ -454,10 +454,11 @@ def main():
     try:
         bible_data = scraper.scrape_bible()
 
-        with open(f"./translations/bible_{args.version.upper()}.json", 'w', encoding='utf-8') as f:
+        output_path = f"./translations/bible_{args.version.upper()}.json"
+        with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(bible_data, f, ensure_ascii=False, indent=2)
     
-        logging.info(f"Bible successfully scraped and saved to {args.output}")
+        logging.info(f"Bible successfully scraped and saved to {output_path}")
     except Exception as e:
         logging.error(str(e))
 
