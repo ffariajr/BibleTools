@@ -71,7 +71,7 @@ def parse_arguments() -> argparse.Namespace:
 def load_bible_version(version: str) -> dict:
     """Load the specified Bible version from JSON file."""
     try:
-        version_path = Path(__file__).parent / 'translations' / f'bible_{version.lower()}.json'
+        version_path = Path(__file__).parent / 'translations' / f'bible_{version.upper()}.json'
         with open(version_path, 'r', encoding='utf-8') as f:
             return json.load(f)
     except FileNotFoundError:
