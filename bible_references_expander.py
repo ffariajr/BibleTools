@@ -331,3 +331,5 @@ if __name__ == '__main__':
 
 # place after paragraph needs to place in order found in paragraph, right now it is reverse order
 # script should break up text by paragraphs, then process each paragraph for references, then reassemble
+# duplicate reference in the same paragraph are skipped
+# handle omitted book name and chapter number after commas
