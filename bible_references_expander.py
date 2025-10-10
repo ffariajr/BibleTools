@@ -76,6 +76,33 @@ def load_book_names() -> dict[str, str]:
         print("Error: Could not load books.json", file=sys.stderr)
         sys.exit(1)
 
+def expand_comma_references(full_ref: str, book_name: str) -> list[str]:
+    """Expand comma-separated references like 'Romans 3:23, 6:23, 8:1' into individual references."""
+    # Extract the reference part after the book name
+    ref_without_book = full_ref[len(book_name):].strip()
+    
+    # Split by commas
+    parts = [p.strip() for p in ref_without_book.split(',')]
+    
+    expanded = []
+    current_chapter = None
+    
+    for part in parts:
+        if ':' in part:
+            # Full chapter:verse reference
+            chapter_verse = part.split(':')
+            current_chapter = chapter_verse[0]
+            expanded.append(f"{book_name} {part}")
+        else:
+            # Just a verse number or verse range, use current chapter
+            if current_chapter:
+                expanded.append(f"{book_name} {current_chapter}:{part}")
+            else:
+                # Invalid reference, skip
+                continue
+                
+    return expanded
+
 def find_bible_references(text: str) -> list[tuple[str, int, int]]:
     """Find all Bible references in text and return list of (reference, start, end) tuples."""
     # Load book names for validation
@@ -88,25 +115,41 @@ def find_bible_references(text: str) -> list[tuple[str, int, int]]:
     # - Optional verse number
     # - Optional verse range
     # - Optional chapter-verse range
-    pattern = r'\b(?:[123] ?)?[A-Za-z]+(?: [oO][fF] (?:(?i:Songs?)|(?i:Solomon)))? ?\d+:\d+(?:-\d+(?::\d+)?)?\b'
+    # - Chapter and verse with optional commas for multiple refs
+    # Example: "Romans 3:23, 6:23, 8:1" or "John 1:1-5,9-13, 14, 2:3"
+    pattern = r'(?:[123] ?)?[A-Za-z]+(?: [oO][fF] (?:(?i:Songs)|(?i:Solomon)))? ?\d+:\d+(?:-\d+(?::\d+)?)?(?:, ?\d+(?::\d+)?(?:-\d+(?::\d+)?)?)*'
     references = []
     
     for match in re.finditer(pattern, text):
-        ref = match.group()
-        # Split into book name and reference
-        parts = ref.split(' ')
+        ref = match.group().strip()
+        # Split into book name and reference part
+        parts = ref.split()
         
-        # Handle multi-word book names and extract book name
+        # Handle multi-word book names
         if parts[0] in ('1', '2', '3'):
-            book_name = ' '.join(parts[:2]).lower()
-            ref_part = ' '.join(parts[2:])
+            if 'of' in parts[1].lower() or (len(parts) > 2 and 'of' in parts[2].lower()):
+                # Handle "Song of Solomon" etc
+                book_idx = next((i for i, p in enumerate(parts) if ':' in p), len(parts))
+                book_name = ' '.join(parts[:book_idx])
+            else:
+                book_name = ' '.join(parts[:2])
+        elif 'of' in ref.lower():
+            # Multi-word book like "Song of Solomon"
+            book_idx = next((i for i, p in enumerate(parts) if ':' in p), len(parts))
+            book_name = ' '.join(parts[:book_idx])
         else:
-            book_name = parts[0].lower()
-            ref_part = ' '.join(parts[1:])
+            book_name = parts[0]
             
         # Validate book name
-        if book_name in book_names:
-            references.append((ref, match.start(), match.end()))
+        if book_name.lower() not in book_names:
+            continue
+            
+        # Expand comma-separated references
+        expanded_refs = expand_comma_references(ref, book_name)
+        
+        # Add each expanded reference with the same position
+        for expanded_ref in expanded_refs:
+            references.append((expanded_ref, match.start(), match.end()))
             
     return references
 
@@ -337,4 +380,3 @@ if __name__ == '__main__':
 # place after paragraph needs to place in order found in paragraph, right now it is reverse order
 # script should break up text by paragraphs, then process each paragraph for references, then reassemble
 # duplicate reference in the same paragraph are skipped
-# handle omitted book name and chapter number after commas
