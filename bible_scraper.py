@@ -422,8 +422,6 @@ class BibleScraper:
                             verse.update(verse_update)
                             break
                 time.sleep(1)  # Be nice to the server
-                break # For testing, remove this break to process all chapters
-            break # this is for testing only, this is not a mistake
 
         # Process refers_me references
         logging.info("Processing reverse references...")
