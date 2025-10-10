@@ -345,8 +345,10 @@ def main():
             
         if not text.strip():
             return
-            
-        result = process_text(text, bible_data, args.after_paragraph, args.limit, args.surround_char)
+        
+        text_paragraphs = text.split('\n')
+        result_paragraphs = [process_text(p, bible_data, args.after_paragraph, args.limit, args.surround_char) if p.strip() else p for p in text_paragraphs]
+        result = '\n'.join(result_paragraphs)
         
         # Handle output
         if args.out:
