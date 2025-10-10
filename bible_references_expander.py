@@ -301,6 +301,7 @@ def process_text(text: str, bible_data: dict, after_paragraph: bool, verse_limit
         if after_paragraph:
             # Find the next newline after the reference
             next_newline = result.find('\n', end)
+            verse_text = f"{ref} {verse_text}"
             if next_newline == -1:
                 # If no newline found, append to end with proper spacing
                 if not result.endswith('\n'):
@@ -380,7 +381,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-# place after paragraph needs to place in order found in paragraph, right now it is reverse order
-# script should break up text by paragraphs, then process each paragraph for references, then reassemble
