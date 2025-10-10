@@ -1,4 +1,3 @@
 # TODO
 
-- do cross references
 

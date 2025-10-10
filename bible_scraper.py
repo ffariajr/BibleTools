@@ -235,20 +235,23 @@ class BibleScraper:
             
             verse_updates = []
             current_heading = None
-            
+
+            previous_verse_num = None
+
             # Process all elements to collect verses and headings
             for element in version_div.find_all(['h3', 'p']):
                 # Process headings
                 if element.name == 'h3':
                     current_heading = element.get_text(strip=True)
                     continue
-                
+
                 # Process verse paragraphs
                 if element.name == 'p':
                     # Find all verse spans within the paragraph
                     verse_spans = element.find_all(class_='text')
                     logging.debug(f"Found {len(verse_spans)} verse spans in paragraph")
                     for verse_span in verse_spans:
+                        append = False
                         logging.debug(f"Verse span HTML: {verse_span.prettify()}")
                         # Process verse text and references
                         verse_text = ''
@@ -267,6 +270,10 @@ class BibleScraper:
                             versenum = verse_span.find('sup', class_='versenum')
                             if versenum:
                                 verse_num = versenum.get_text(strip=True)
+                            else:
+                                verse_num = previous_verse_num  # Continue previous verse if no number
+                                append = True
+                        previous_verse_num = verse_num
                         
                         # Process footnotes and cross-references first
                         for sup in verse_span.find_all('sup', class_='footnote'):
@@ -334,18 +341,26 @@ class BibleScraper:
                             continue
                         
                         # Join multiple footnotes with a space, or None if no footnotes
-                        footnote = ' '.join(verse_footnotes) if verse_footnotes else None
+                        footnote = '; '.join(verse_footnotes) if verse_footnotes else None
                         
-                        verse_updates.append({
-                            "verse": verse_num,
-                            "heading": current_heading,
-                            "text": verse_text,
-                            "footnote": footnote,
-                            "cross_references": {
-                                "refers_to": verse_cross_refs,
-                                "refers_me": []
-                            }
-                        })
+                        if not append:
+                            verse_updates.append({
+                                "verse": verse_num,
+                                "heading": current_heading,
+                                "text": verse_text,
+                                "footnote": footnote,
+                                "cross_references": {
+                                    "refers_to": verse_cross_refs,
+                                    "refers_me": []
+                                }
+                            })
+                        else:
+                            verse_updates[-1]['text'] += ' ' + verse_text
+                            if footnote:
+                                verse_updates[-1]['footnote'] = (verse_updates[-1]['footnote'] + '; ' + footnote) if verse_updates[-1]['footnote'] else footnote
+                            verse_updates[-1]['cross_references']['refers_to'].extend(verse_cross_refs)
+                            if verse_updates[-1]['heading'] is None:
+                                verse_updates[-1]['heading'] = current_heading
                         logging.debug(f"Verse {verse_num}: {verse_text}")
                         current_heading = None  # Clear heading after using it
             
