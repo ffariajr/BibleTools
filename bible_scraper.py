@@ -114,6 +114,11 @@ class BibleScraper:
             response.raise_for_status()
             soup = BeautifulSoup(response.text, 'html.parser')
             
+            # Check if version exists by looking for error messages or version not found
+            error_msg = soup.find('div', class_='error-msg')
+            if error_msg or not soup.find('div', class_='passage-text'):
+                raise ValueError(f"Bible version '{self.version}' does not exist or is not available")
+            
             # Find version information and copyright notice
             copyright_div = soup.find('div', class_='publisher-info-bottom')
             copyright_text = ""
@@ -161,12 +166,7 @@ class BibleScraper:
             
         except requests.RequestException as e:
             logging.error(f"Error fetching version info: {str(e)}")
-            return {
-                "name": f"{self.version} Bible",
-                "initials": self.version,
-                "version": "",
-                "citation": f"Scripture quotations taken from the {self.version} Bible."
-            }
+            raise ValueError(f"Failed to fetch Bible version '{self.version}': {str(e)}") from e
 
     def get_chapter_content(self, book: str, chapter: int) -> Dict[str, Any]:
         """Scrape a single chapter from Bible Gateway."""
@@ -446,18 +446,20 @@ class BibleScraper:
 
 def main():
     parser = argparse.ArgumentParser(description="Scrape Bible Gateway for Bible text and references")
-    parser.add_argument("version", help="Bible version abbreviation (e.g., NIV, ESV, KJV)")
-    parser.add_argument("template", help="Path to the template JSON file")
-    parser.add_argument("output", help="Output JSON file path")
+    parser.add_argument("version", help="Bible version abbreviation (e.g., ESV, NASB, NKJV)")
+    parser.add_argument("template", help="Path to the template JSON file", nargs="?", default="./version_template.json")
     args = parser.parse_args()
 
     scraper = BibleScraper(args.version, args.template)
-    bible_data = scraper.scrape_bible()
+    try:
+        bible_data = scraper.scrape_bible()
 
-    with open(args.output, 'w', encoding='utf-8') as f:
-        json.dump(bible_data, f, ensure_ascii=False, indent=2)
+        with open(f"./translations/bible_{args.version.upper()}.json", 'w', encoding='utf-8') as f:
+            json.dump(bible_data, f, ensure_ascii=False, indent=2)
     
-    logging.info(f"Bible successfully scraped and saved to {args.output}")
+        logging.info(f"Bible successfully scraped and saved to {args.output}")
+    except Exception as e:
+        logging.error(str(e))
 
 if __name__ == "__main__":
     main()
