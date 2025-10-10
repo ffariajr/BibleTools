@@ -268,7 +268,29 @@ class BibleScraper:
                             if versenum:
                                 verse_num = versenum.get_text(strip=True)
                         
-                        # Remove all excluded elements from original verse span, replacing with spaces
+                        # Process footnotes and cross-references first
+                        for sup in verse_span.find_all('sup', class_='footnote'):
+                            fn_id = sup.get('data-fn')
+                            if fn_id:
+                                if fn_id.startswith('#'):
+                                    # Remove the '#' prefix to match the element id
+                                    fn_id = fn_id[1:]
+                                # Find the footnote element directly
+                                fn_element = soup.find('li', id=fn_id)
+                                if fn_element:
+                                    text_span = fn_element.find('span', class_='footnote-text')
+                                    if text_span:
+                                        fn_text = text_span.get_text(strip=False)
+                                        # Normalize quotes in footnote text
+                                        verse_footnotes.append(normalize_quotes(fn_text))
+                        
+                        # Process cross references
+                        for sup in verse_span.find_all('sup', class_='crossreference'):
+                            cr_id = sup.get('data-cr')
+                            if cr_id and cr_id in cross_refs:
+                                verse_cross_refs.extend(cross_refs[cr_id])
+                                
+                        # Now remove all excluded elements from original verse span, replacing with spaces
                         for element in verse_span.find_all(['span', 'sup']):
                             if (element.get('class') and 
                                 any(c in ['crossreference', 'footnote', 'chapternum', 'versenum'] 
@@ -284,22 +306,6 @@ class BibleScraper:
                         verse_text = normalize_quotes(verse_text)
                         # Now strip and ensure no leading/trailing spaces
                         verse_text = verse_text.strip()
-                        
-                        # Process footnotes and cross-references separately
-                        for sup in verse_span.find_all('sup', class_='footnote'):
-                            fn_id = sup.get('data-fn')
-                            if fn_id:
-                                if fn_id.startswith('#'):
-                                    # Remove the '#' prefix to match the element id
-                                    fn_id = fn_id[1:]
-                                # Find the footnote element directly
-                                fn_element = soup.find('li', id=fn_id)
-                                if fn_element:
-                                    text_span = fn_element.find('span', class_='footnote-text')
-                                    if text_span:
-                                        fn_text = text_span.get_text(strip=True)
-                                        # Normalize quotes in footnote text
-                                        verse_footnotes.append(normalize_quotes(fn_text))
                         
                         # Process cross references
                         for sup in verse_span.find_all('sup', class_='crossreference'):
