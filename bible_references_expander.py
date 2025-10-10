@@ -27,6 +27,7 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument('-l', '--limit', '--limit-verses',
                         type=int,
                         metavar='N',
+                        default=None,
                         help='Ignores verse references if the amount of verses is more than N')
     parser.add_argument('-p', '--after-paragraph',
                         action='store_true',
@@ -36,6 +37,9 @@ def parse_arguments() -> argparse.Namespace:
 
     if args.limit is not None and args.limit < 1:
         parser.error("Limit must be a positive integer")
+
+    if args.limit is None:
+        args.limit = float('inf')
 
     return args
 
@@ -145,17 +149,10 @@ def parse_reference(reference: str, book_names: dict) -> tuple[str, int, Optiona
             
     return canonical_book, chapter, start_verse, end_chapter or chapter, end_verse
 
-def get_verse_text(reference: str, bible_data: dict) -> Optional[str]:
+def get_verse_text(bible_data: dict, parsed_reference: tuple[str, int, Optional[int], Optional[int], Optional[int]]) -> Optional[str]:
     """Get the verse text for a given reference."""
-    book_names = load_book_names()
-    parsed = parse_reference(reference, book_names)
-    
-    if not parsed:
-        return None
-        
-    book, start_chapter, start_verse, end_chapter, end_verse = parsed
-    
     # Find the book in the Bible data
+    book, start_chapter, start_verse, end_chapter, end_verse = parsed_reference
     book_data = None
     for b in bible_data['books']:
         if b['book'] == book:
@@ -198,7 +195,32 @@ def get_verse_text(reference: str, bible_data: dict) -> Optional[str]:
     verse = re.sub(r'^\d+', '', verse)  # Remove leading verse number
     return verse
 
-def process_text(text: str, bible_data: dict, after_paragraph: bool) -> str:
+def count_verses(bible_data: dict, parsed_reference: tuple[str, int, Optional[int], Optional[int], Optional[int]]) -> int:
+    """Count the number of verses in a given reference."""
+    book, start_chapter, start_verse, end_chapter, end_verse = parsed_reference
+    book_data = None
+    for b in bible_data['books']:
+        if b['book'] == book:
+            book_data = b
+            break
+    
+    if not book_data or start_verse is None:
+        return 0
+    
+    count = 0
+    for chapter in range(start_chapter, end_chapter + 1):
+        chapter_data = next((c for c in book_data['chapters'] if c['chapter'] == chapter), None)
+        if not chapter_data:
+            continue
+            
+        verse_start = start_verse if chapter == start_chapter else 1
+        verse_end = end_verse if chapter == end_chapter else len(chapter_data['verses'])
+        
+        count += sum(1 for v in chapter_data['verses'] if verse_start <= v['verse'] <= (verse_end or verse_start))
+    
+    return count
+
+def process_text(text: str, bible_data: dict, after_paragraph: bool, verse_limit: int = None) -> str:
     """Process text and expand/insert Bible references."""
     if not text:
         return text
@@ -210,9 +232,16 @@ def process_text(text: str, bible_data: dict, after_paragraph: bool) -> str:
     # Process references in reverse order to maintain correct string indices
     references.reverse()
     result = text
+
+    book_names = load_book_names()
     
     for ref, start, end in references:
-        verse_text = get_verse_text(ref, bible_data)
+        parsed_reference = parse_reference(ref, book_names)
+        if not parsed_reference:
+            continue
+        if verse_limit is None or count_verses(bible_data, parsed_reference) > verse_limit:
+            continue
+        verse_text = get_verse_text(bible_data, parsed_reference)
         if verse_text is None:
             # Skip invalid references but preserve the original text
             print(f"Warning: Could not process reference '{ref}'", file=sys.stderr)
@@ -269,7 +298,7 @@ def main():
         if not text.strip():
             return
             
-        result = process_text(text, bible_data, args.after_paragraph)
+        result = process_text(text, bible_data, args.after_paragraph, args.limit)
         
         # Handle output
         if args.out:
@@ -302,4 +331,3 @@ if __name__ == '__main__':
 
 # place after paragraph needs to place in order found in paragraph, right now it is reverse order
 # script should break up text by paragraphs, then process each paragraph for references, then reassemble
-# implement limit
