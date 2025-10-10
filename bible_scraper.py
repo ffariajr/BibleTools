@@ -318,11 +318,14 @@ class BibleScraper:
                             logging.error(f"No verse number found for text in {book} {chapter}: {verse_text}")
                             continue
                         
+                        # Join multiple footnotes with a space, or None if no footnotes
+                        footnote = ' '.join(verse_footnotes) if verse_footnotes else None
+                        
                         verse_updates.append({
                             "verse": verse_num,
                             "heading": current_heading,
                             "text": verse_text,
-                            "footnotes": verse_footnotes,
+                            "footnote": footnote,
                             "cross_references": {
                                 "refers_to": verse_cross_refs,
                                 "refers_me": []
