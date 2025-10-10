@@ -5,7 +5,7 @@ import json
 from collections import defaultdict
 
 REQUIRED_CSV_COLS = {
-    "reference_id", "book_sequence", "book_abbrev", "chapter", "verse", "verse_sequence"
+    "reference", "book_sequence", "book_abbrev", "chapter", "chapter_sequence", "verse", "verse_sequence"
 }
 
 def load_books(path):
@@ -23,13 +23,14 @@ def read_csv(path):
     rows = []
     with open(path, newline="", encoding="utf-8-sig") as f:
         rdr = csv.DictReader(f)
-        print(rdr.fieldnames)
+        #print(rdr.fieldnames)
         missing = REQUIRED_CSV_COLS - set(rdr.fieldnames or [])
         if missing:
             raise ValueError(f"CSV missing required columns: {', '.join(sorted(missing))}")
         for r in rdr:
             r["book_sequence"]   = int(r["book_sequence"])
             r["chapter"]         = int(r["chapter"])
+            r["chapter_sequence"]= int(r["chapter_sequence"])
             r["verse"]           = int(r["verse"])
             r["verse_sequence"]  = int(r["verse_sequence"])
             r["book_abbrev"]     = r["book_abbrev"].strip()
@@ -79,10 +80,13 @@ def build_output(books_meta, name_map, refs):
                 "cross_references": {"refers_to": [], "refers_me": []},
                 "footnote": None
             } for vr in vrows]
+            
+            # Get chapter_sequence from CSV (all rows for this chapter should have same value)
+            chapter_sequence = vrows[0]["chapter_sequence"]
 
             ch_obj = {
                 "chapter": chap_num,
-                "chapter_sequence": None,   # fill later
+                "chapter_sequence": chapter_sequence,
                 "num_verses": len(verses),
                 "verses": verses
             }
@@ -98,22 +102,18 @@ def build_output(books_meta, name_map, refs):
             "chapters": chapter_objs
         })
 
-    # Assign global chapter_sequence across all books ordered by book_sequence then chapter number
-    # chapters_index is already in that order
-    for i, (_bname, ch_obj) in enumerate(chapters_index, start=1):
-        ch_obj["chapter_sequence"] = i
 
     return books_out
 
 def main():
     ap = argparse.ArgumentParser(description="Build nested Bible JSON from books.json and references CSV.")
-    ap.add_argument("--books", required=True, help="Path to books JSON")
-    ap.add_argument("--csv", required=True, help="Path to references CSV")
-    ap.add_argument("--out", required=True, help="Path to write output JSON")
+    ap.add_argument("--json", default="./books.json", help="Path to books JSON")
+    ap.add_argument("--csv", default="./books.csv", help="Path to references CSV")
+    ap.add_argument("--out", default="./version_template.json", help="Path to write output JSON")
     ap.add_argument("--indent", type=int, default=4, help="JSON indent (default 4)")
     args = ap.parse_args()
 
-    books_meta, name_map = load_books(args.books)
+    books_meta, name_map = load_books(args.json)
     refs = read_csv(args.csv)
     books = build_output(books_meta, name_map, refs)
 
