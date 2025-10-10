@@ -37,8 +37,19 @@ def parse_arguments() -> argparse.Namespace:
                         default='`',
                         dest='surround_char',
                         help='Character to surround verse text with (default: `)')
+    parser.add_argument('--list-versions',
+                        action='store_true',
+                        help='List available Bible versions')
     
     args = parser.parse_args()
+
+    if args.list_versions:
+        translations_dir = Path(__file__).parent / 'translations'
+        versions = [f.stem.replace('bible_', '').upper() for f in translations_dir.glob('bible_*.json')]
+        print("Available Bible versions:")
+        for v in versions:
+            print(f" - {v}")
+        sys.exit(0)
 
     if args.limit is not None and args.limit < 1:
         parser.error("Limit must be a positive integer")
