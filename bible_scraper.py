@@ -287,8 +287,17 @@ class BibleScraper:
                         # Process cross references
                         for sup in verse_span.find_all('sup', class_='crossreference'):
                             cr_id = sup.get('data-cr')
-                            if cr_id and cr_id in cross_refs:
-                                verse_cross_refs.extend(cross_refs[cr_id])
+                            if cr_id:
+                                if cr_id.startswith("#"):
+                                    cr_id = cr_id[1:]
+                                cr_element = soup.find('li', id=cr_id)
+                                if cr_element:
+                                    ref_links = cr_element.find_all('a', class_='crossref-link')
+                                    for link in ref_links:
+                                        bibleref = link.get('data-bibleref')
+                                        if bibleref:
+                                            refs = parse_bible_reference(bibleref)
+                                            verse_cross_refs.extend(refs)
                                 
                         # Now remove all excluded elements from original verse span, replacing with spaces
                         for element in verse_span.find_all(['span', 'sup']):
