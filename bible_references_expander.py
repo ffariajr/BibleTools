@@ -79,7 +79,7 @@ def find_bible_references(text: str) -> list[tuple[str, int, int]]:
     # - Optional verse number
     # - Optional verse range
     # - Optional chapter-verse range
-    pattern = r'\b(?:[123] )?[A-Za-z]+(?: [oO][fF] (?:(?i:Songs?)|(?i:Solomon)))? \d+:\d+(?:-\d+(?::\d+)?)?\b'
+    pattern = r'\b(?:[123] ?)?[A-Za-z]+(?: [oO][fF] (?:(?i:Songs?)|(?i:Solomon)))? ?\d+:\d+(?:-\d+(?::\d+)?)?\b'
     references = []
     
     for match in re.finditer(pattern, text):
