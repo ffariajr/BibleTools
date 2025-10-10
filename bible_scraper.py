@@ -14,6 +14,12 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 
+def normalize_quotes(text: str) -> str:
+    """Normalize smart quotes to standard quotes."""
+    text = re.sub(u'[\u201c\u201d\u201f]', '"', text)  # Smart double quotes
+    text = re.sub(u'[\u2018\u2019\u201b]', "'", text)  # Smart single quotes
+    return text
+
 def parse_bible_reference(ref_text: str) -> List[Dict[str, str]]:
     """Parse bible references including ranges and multiple references."""
     refs = []
@@ -275,22 +281,31 @@ class BibleScraper:
                         # Replace all whitespace sequences (including newlines, tabs) with a single space
                         verse_text = re.sub(r'\s+', ' ', verse_text)
                         # Normalize quotes
-                        verse_text = re.sub(u'[\u201c\u201d\u201f]', '"', verse_text)  # Smart double quotes
-                        verse_text = re.sub(u'[\u2018\u2019\u201b]', "'", verse_text)  # Smart single quotes
+                        verse_text = normalize_quotes(verse_text)
                         # Now strip and ensure no leading/trailing spaces
                         verse_text = verse_text.strip()
                         
                         # Process footnotes and cross-references separately
-                        for sup in verse_span.find_all('sup'):
-                            if sup.get('class'):
-                                if 'footnote' in sup.get('class'):
-                                    fn_id = sup.get('data-fn')
-                                    if fn_id and fn_id in footnotes:
-                                        verse_footnotes.append(footnotes[fn_id])
-                                elif 'crossreference' in sup.get('class'):
-                                    cr_id = sup.get('data-cr')
-                                    if cr_id and cr_id in cross_refs:
-                                        verse_cross_refs.extend(cross_refs[cr_id])
+                        for sup in verse_span.find_all('sup', class_='footnote'):
+                            fn_id = sup.get('data-fn')
+                            if fn_id:
+                                if fn_id.startswith('#'):
+                                    # Remove the '#' prefix to match the element id
+                                    fn_id = fn_id[1:]
+                                # Find the footnote element directly
+                                fn_element = soup.find('li', id=fn_id)
+                                if fn_element:
+                                    text_span = fn_element.find('span', class_='footnote-text')
+                                    if text_span:
+                                        fn_text = text_span.get_text(strip=True)
+                                        # Normalize quotes in footnote text
+                                        verse_footnotes.append(normalize_quotes(fn_text))
+                        
+                        # Process cross references
+                        for sup in verse_span.find_all('sup', class_='crossreference'):
+                            cr_id = sup.get('data-cr')
+                            #if cr_id and cr_id in cross_refs:
+                            #    verse_cross_refs.extend(cross_refs[cr_id])
                         
                         # Clean up verse text
                         verse_text = verse_text.strip()
