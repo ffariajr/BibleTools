@@ -32,6 +32,11 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument('-p', '--after-paragraph',
                         action='store_true',
                         help='Place verse after next newline')
+    parser.add_argument('-s', '--surround-char',
+                        type=str,
+                        default='`',
+                        dest='surround_char',
+                        help='Character to surround verse text with (default: `)')
     
     args = parser.parse_args()
 
@@ -149,7 +154,7 @@ def parse_reference(reference: str, book_names: dict) -> tuple[str, int, Optiona
             
     return canonical_book, chapter, start_verse, end_chapter or chapter, end_verse
 
-def get_verse_text(bible_data: dict, parsed_reference: tuple[str, int, Optional[int], Optional[int], Optional[int]]) -> Optional[str]:
+def get_verse_text(bible_data: dict, surround_char: str, parsed_reference: tuple[str, int, Optional[int], Optional[int], Optional[int]]) -> Optional[str]:
     """Get the verse text for a given reference."""
     # Find the book in the Bible data
     book, start_chapter, start_verse, end_chapter, end_verse = parsed_reference
@@ -193,7 +198,7 @@ def get_verse_text(bible_data: dict, parsed_reference: tuple[str, int, Optional[
                 formatted_ref += f"-{end_verse}"
     verse = ' '.join(verses)
     verse = re.sub(r'^\d+', '', verse)  # Remove leading verse number
-    return verse
+    return f"{surround_char}{verse.strip().rstrip(',.')}{surround_char}"
 
 def count_verses(bible_data: dict, parsed_reference: tuple[str, int, Optional[int], Optional[int], Optional[int]]) -> int:
     """Count the number of verses in a given reference."""
@@ -220,7 +225,7 @@ def count_verses(bible_data: dict, parsed_reference: tuple[str, int, Optional[in
     
     return count
 
-def process_text(text: str, bible_data: dict, after_paragraph: bool, verse_limit: int = None) -> str:
+def process_text(text: str, bible_data: dict, after_paragraph: bool, verse_limit: int, verse_text_surround_char: str) -> str:
     """Process text and expand/insert Bible references."""
     if not text:
         return text
@@ -241,7 +246,7 @@ def process_text(text: str, bible_data: dict, after_paragraph: bool, verse_limit
             continue
         if verse_limit is None or count_verses(bible_data, parsed_reference) > verse_limit:
             continue
-        verse_text = get_verse_text(bible_data, parsed_reference)
+        verse_text = get_verse_text(bible_data, verse_text_surround_char, parsed_reference)
         if verse_text is None:
             # Skip invalid references but preserve the original text
             print(f"Warning: Could not process reference '{ref}'", file=sys.stderr)
@@ -298,7 +303,7 @@ def main():
         if not text.strip():
             return
             
-        result = process_text(text, bible_data, args.after_paragraph, args.limit)
+        result = process_text(text, bible_data, args.after_paragraph, args.limit, args.surround_char)
         
         # Handle output
         if args.out:
