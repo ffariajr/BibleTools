@@ -11,11 +11,18 @@ def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description='Expand Bible references in text with actual verses.'
     )
-    parser.add_argument('version', 
-                        help='Bible version to use (e.g., ESV, NASB)')
-    parser.add_argument('-v', '--version', 
-                        dest='version',
-                        help='Bible version to use')
+    
+    # Create mutually exclusive group for main operation mode
+    mode_group = parser.add_mutually_exclusive_group(required=True)
+    mode_group.add_argument('version', 
+                           nargs='?',
+                           metavar='VERSION',
+                           help='Bible version to use (e.g., ESV, NASB)')
+    mode_group.add_argument('--list-versions',
+                           action='store_true',
+                           help='List available Bible versions and exit')
+    
+    # Arguments only valid with version (not with --list-versions)
     parser.add_argument('-f', '--file',
                         type=argparse.FileType('r'),
                         metavar='INFILE',
@@ -37,9 +44,6 @@ def parse_arguments() -> argparse.Namespace:
                         default='`',
                         dest='surround_char',
                         help='Character to surround verse text with (default: `)')
-    parser.add_argument('--list-versions',
-                        action='store_true',
-                        help='List available Bible versions')
     
     args = parser.parse_args()
 
@@ -51,6 +55,11 @@ def parse_arguments() -> argparse.Namespace:
             print(f" - {v}")
         sys.exit(0)
 
+    # Validate version is provided when not listing
+    if not args.version:
+        parser.error("VERSION is required unless --list-versions is specified")
+    
+    # Validate limit
     if args.limit is not None and args.limit < 1:
         parser.error("Limit must be a positive integer")
 
