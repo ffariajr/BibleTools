@@ -249,10 +249,10 @@ class BibleScraper:
                 if element.name == 'p':
                     # Find all verse spans within the paragraph
                     verse_spans = element.find_all(class_='text')
-                    logging.debug(f"Found {len(verse_spans)} verse spans in paragraph")
+                    #logging.debug(f"Found {len(verse_spans)} verse spans in paragraph")
                     for verse_span in verse_spans:
                         append = False
-                        logging.debug(f"Verse span HTML: {verse_span.prettify()}")
+                        #logging.debug(f"Verse span HTML: {verse_span.prettify()}")
                         # Process verse text and references
                         verse_text = ''
                         verse_footnotes = []
@@ -361,7 +361,7 @@ class BibleScraper:
                             verse_updates[-1]['cross_references']['refers_to'].extend(verse_cross_refs)
                             if verse_updates[-1]['heading'] is None:
                                 verse_updates[-1]['heading'] = current_heading
-                        logging.debug(f"Verse {verse_num}: {verse_text}")
+                        #logging.debug(f"Verse {verse_num}: {verse_text}")
                         current_heading = None  # Clear heading after using it
             
             return verse_updates
@@ -421,7 +421,7 @@ class BibleScraper:
             
             for chapter in book["chapters"]:
                 chapter_num = chapter["chapter"]
-                logging.info(f"  Scraping {book_name} {chapter_num}...")
+                logging.debug(f"  Scraping {book_name} {chapter_num}...")
                 
                 # Get chapter content
                 verse_updates = self.get_chapter_content(book_name, chapter_num)
