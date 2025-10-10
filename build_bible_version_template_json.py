@@ -77,7 +77,7 @@ def build_output(books_meta, name_map, refs):
                 "verse": vr["verse"],
                 "text": None,
                 "cross_references": {"refers_to": [], "refers_me": []},
-                "footnotes": []
+                "footnote": None
             } for vr in vrows]
 
             ch_obj = {

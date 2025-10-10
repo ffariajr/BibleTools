@@ -127,16 +127,16 @@
                                                     "refers_to"
                                                 ]
                                             },
-                                            "footnotes": {
-                                                "type": "array",
-                                                "items": {
-                                                    "type": "string"
-                                                }
+                                            "footnote": {
+                                                "type": [
+                                                    "null",
+                                                    "string"
+                                                ]
                                             }
                                         },
                                         "required": [
                                             "cross_references",
-                                            "footnotes",
+                                            "footnote",
                                             "heading",
                                             "text",
                                             "verse",
