@@ -276,7 +276,10 @@ def process_text(text: str, bible_data: dict, after_paragraph: bool, verse_limit
     references = find_bible_references(text)
     if not references:
         return text
-    
+
+    seen = set()
+    references = [ref for ref in references if not (ref[0] in seen or seen.add(ref[0]))]
+
     # Process references in reverse order to maintain correct string indices
     references.reverse()
     result = text
@@ -381,4 +384,3 @@ if __name__ == '__main__':
 
 # place after paragraph needs to place in order found in paragraph, right now it is reverse order
 # script should break up text by paragraphs, then process each paragraph for references, then reassemble
-# duplicate reference in the same paragraph are skipped
