@@ -193,7 +193,7 @@ class BibleScraper:
             passage_content = soup.find(class_='passage-content')
             if not passage_content:
                 logging.error("Could not find passage-content")
-                return []
+                return {}
                 
             # Debug HTML structure
             #logging.debug(f"HTML structure:\n{passage_content.prettify()}")
@@ -207,7 +207,7 @@ class BibleScraper:
             if footnotes_div:
                 for fn in footnotes_div.find_all('li'):
                     fn_id = fn.get('id')
-                    if fn_id and fn_id.startswith('fen-'):
+                    if fn_id and isinstance(fn_id, str) and fn_id.startswith('fen-'):
                         text_span = fn.find('span', {'class': 'footnote-text'})
                         if text_span:
                                 footnotes[fn_id] = text_span.get_text(strip=True)
@@ -217,12 +217,12 @@ class BibleScraper:
             if crossrefs_div:
                 for cr in crossrefs_div.find_all('li'):
                     cr_id = cr.get('id')
-                    if cr_id and cr_id.startswith('cen-'):
+                    if cr_id and isinstance(cr_id, str) and cr_id.startswith('cen-'):
                         ref_links = cr.find_all('a', {'class': 'crossref-link'})
                         refs = []
                         for link in ref_links:
                             bibleref = link.get('data-bibleref')
-                            if bibleref:
+                            if bibleref and isinstance(bibleref, str):
                                 refs.extend(parse_bible_reference(bibleref))
                         if refs:
                             cross_refs[cr_id] = refs
@@ -278,7 +278,7 @@ class BibleScraper:
                         # Process footnotes and cross-references first
                         for sup in verse_span.find_all('sup', class_='footnote'):
                             fn_id = sup.get('data-fn')
-                            if fn_id:
+                            if fn_id and isinstance(fn_id, str):
                                 if fn_id.startswith('#'):
                                     # Remove the '#' prefix to match the element id
                                     fn_id = fn_id[1:]
@@ -294,7 +294,7 @@ class BibleScraper:
                         # Process cross references
                         for sup in verse_span.find_all('sup', class_='crossreference'):
                             cr_id = sup.get('data-cr')
-                            if cr_id:
+                            if cr_id and isinstance(cr_id, str):
                                 if cr_id.startswith("#"):
                                     cr_id = cr_id[1:]
                                 cr_element = soup.find('li', id=cr_id)
@@ -302,7 +302,7 @@ class BibleScraper:
                                     ref_links = cr_element.find_all('a', class_='crossref-link')
                                     for link in ref_links:
                                         bibleref = link.get('data-bibleref')
-                                        if bibleref:
+                                        if bibleref and isinstance(bibleref, str):
                                             refs = parse_bible_reference(bibleref)
                                             verse_cross_refs.extend(refs)
                                 
@@ -431,11 +431,12 @@ class BibleScraper:
                     
                 # Update verses with scraped content
                 for verse_update in verse_updates:
-                    verse_num = verse_update.pop('verse')  # Remove verse number from update data
-                    for verse in chapter["verses"]:
-                        if str(verse["verse"]) == verse_num:
-                            verse.update(verse_update)
-                            break
+                    if isinstance(verse_update, dict):
+                        verse_num = verse_update.pop('verse')  # Remove verse number from update data
+                        for verse in chapter["verses"]:
+                            if str(verse["verse"]) == verse_num:
+                                verse.update(verse_update)
+                                break
                 time.sleep(1)  # Be nice to the server
 
         # Process refers_me references

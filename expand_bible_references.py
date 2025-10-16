@@ -173,7 +173,7 @@ def find_bible_references(text: str) -> list[tuple[str, int, int]]:
             
     return references
 
-def parse_reference(reference: str, book_names: dict) -> tuple[str, int, Optional[int], Optional[int], Optional[int]]:
+def parse_reference(reference: str, book_names: dict) -> Optional[tuple[str, int, Optional[int], Optional[int], Optional[int]]]:
     """Parse a Bible reference into its components."""
     parts = reference.split(' ')
     
@@ -235,7 +235,9 @@ def get_verse_text(bible_data: dict, surround_char: str, parsed_reference: tuple
     # Skip if no specific verse is specified (chapter-only references)
     if start_verse is None:
         return None
-        
+    
+    if end_chapter is None:
+        return None
     # Collect all verses in the range
     for chapter in range(start_chapter, end_chapter + 1):
         chapter_data = next((c for c in book_data['chapters'] if c['chapter'] == chapter), None)
@@ -272,7 +274,7 @@ def count_verses(bible_data: dict, parsed_reference: tuple[str, int, Optional[in
             book_data = b
             break
     
-    if not book_data or start_verse is None:
+    if not book_data or start_verse is None or end_chapter is None:
         return 0
     
     count = 0
