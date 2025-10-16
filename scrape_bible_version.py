@@ -8,12 +8,6 @@ from typing import Dict, List, Any, Optional
 import re
 import copy
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
-
 def normalize_quotes(text: str) -> str:
     """Normalize smart quotes to standard quotes."""
     text = re.sub(u'[\u201c\u201d\u201f]', '"', text)  # Smart double quotes
@@ -197,35 +191,6 @@ class BibleScraper:
                 
             # Debug HTML structure
             #logging.debug(f"HTML structure:\n{passage_content.prettify()}")
-            
-            # Get verses container - try different class names
-            verses_container = passage_content.find(class_='text-html') or passage_content
-                
-            # Find all footnotes and cross references for lookup
-            footnotes = {}
-            footnotes_div = soup.find('div', class_='footnotes')
-            if footnotes_div:
-                for fn in footnotes_div.find_all('li'):
-                    fn_id = fn.get('id')
-                    if fn_id and isinstance(fn_id, str) and fn_id.startswith('fen-'):
-                        text_span = fn.find('span', {'class': 'footnote-text'})
-                        if text_span:
-                                footnotes[fn_id] = text_span.get_text(strip=True)
-            
-            cross_refs = {}
-            crossrefs_div = soup.find('div', class_='crossrefs')
-            if crossrefs_div:
-                for cr in crossrefs_div.find_all('li'):
-                    cr_id = cr.get('id')
-                    if cr_id and isinstance(cr_id, str) and cr_id.startswith('cen-'):
-                        ref_links = cr.find_all('a', {'class': 'crossref-link'})
-                        refs = []
-                        for link in ref_links:
-                            bibleref = link.get('data-bibleref')
-                            if bibleref and isinstance(bibleref, str):
-                                refs.extend(parse_bible_reference(bibleref))
-                        if refs:
-                            cross_refs[cr_id] = refs
             
             # Process verses and headings
             # The .version-{version} div contains all verses in <p> tags, with <h3> for headings
@@ -446,6 +411,12 @@ class BibleScraper:
         return self.template
 
 def main():
+    # Configure logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s'
+    )
+    
     parser = argparse.ArgumentParser(description="Scrape Bible Gateway for Bible text and references")
     parser.add_argument("version", help="Bible version abbreviation (e.g., ESV, NASB, NKJV)")
     parser.add_argument("template", help="Path to the template JSON file", nargs="?", default="./version_template.json")
