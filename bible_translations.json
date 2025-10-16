@@ -1,0 +1,1400 @@
+[
+  {
+    "shortname": "AMU",
+    "longname": "Amuzgo de Guerrero",
+    "langname": "Amuzgo de Guerrero",
+    "langcode": "AMU"
+  },
+  {
+    "shortname": "ERV-AR",
+    "longname": "Arabic Bible: Easy-to-Read Version",
+    "langname": "العربية",
+    "langcode": "AR"
+  },
+  {
+    "shortname": "NAV",
+    "longname": "Ketab El Hayat",
+    "langname": "العربية",
+    "langcode": "AR"
+  },
+  {
+    "shortname": "ERV-AWA",
+    "longname": "Awadhi Bible: Easy-to-Read Version",
+    "langname": "अवधी",
+    "langcode": "AWA"
+  },
+  {
+    "shortname": "BG1940",
+    "longname": "1940 Bulgarian Bible",
+    "langname": "Български",
+    "langcode": "BG"
+  },
+  {
+    "shortname": "BULG",
+    "longname": "Bulgarian Bible",
+    "langname": "Български",
+    "langcode": "BG"
+  },
+  {
+    "shortname": "ERV-BG",
+    "longname": "Bulgarian New Testament: Easy-to-Read Version",
+    "langname": "Български",
+    "langcode": "BG"
+  },
+  {
+    "shortname": "CBT",
+    "longname": "Библия, нов превод от оригиналните езици (с неканоничните книги)",
+    "langname": "Български",
+    "langcode": "BG"
+  },
+  {
+    "shortname": "BOB",
+    "longname": "Библия, синодално издание",
+    "langname": "Български",
+    "langcode": "BG"
+  },
+  {
+    "shortname": "BPB",
+    "longname": "Библия, ревизирано издание",
+    "langname": "Български",
+    "langcode": "BG"
+  },
+  {
+    "shortname": "BERV",
+    "longname": "Bengali: পবিত্র বাইবেল",
+    "langname": "বাংলা",
+    "langcode": "BN"
+  },
+  {
+    "shortname": "CCO",
+    "longname": "Chinanteco de Comaltepec",
+    "langname": "Chinanteco de Comaltepec",
+    "langcode": "CCO"
+  },
+  {
+    "shortname": "APSD-CEB",
+    "longname": "Ang Pulong Sa Dios",
+    "langname": "Cebuano",
+    "langcode": "CEB"
+  },
+  {
+    "shortname": "CHR",
+    "longname": "Cherokee New Testament",
+    "langname": "ᏣᎳᎩ ᎦᏬᏂᎯᏍ",
+    "langcode": "CHR"
+  },
+  {
+    "shortname": "KSS",
+    "longname": "Kurdi Sorani Standard",
+    "langname": "كوردی سۆرانی",
+    "langcode": "CKB"
+  },
+  {
+    "shortname": "CKW",
+    "longname": "Cakchiquel Occidental",
+    "langname": "Cakchiquel Occidental",
+    "langcode": "CKW"
+  },
+  {
+    "shortname": "B21",
+    "longname": "Bible 21",
+    "langname": "Čeština",
+    "langcode": "CS"
+  },
+  {
+    "shortname": "SNC",
+    "longname": "Slovo na cestu",
+    "langname": "Čeština",
+    "langcode": "CS"
+  },
+  {
+    "shortname": "BWM",
+    "longname": "Beibl William Morgan",
+    "langname": "Cymraeg",
+    "langcode": "CY"
+  },
+  {
+    "shortname": "BPH",
+    "longname": "Bibelen på hverdagsdansk",
+    "langname": "Dansk",
+    "langcode": "DA"
+  },
+  {
+    "shortname": "DN1933",
+    "longname": "Dette er Biblen på dansk",
+    "langname": "Dansk",
+    "langcode": "DA"
+  },
+  {
+    "shortname": "HOF",
+    "longname": "Hoffnung für Alle",
+    "langname": "Deutsch",
+    "langcode": "DE"
+  },
+  {
+    "shortname": "LUTH1545",
+    "longname": "Luther Bibel 1545",
+    "langname": "Deutsch",
+    "langcode": "DE"
+  },
+  {
+    "shortname": "NGU-DE",
+    "longname": "Neue Genfer Übersetzung",
+    "langname": "Deutsch",
+    "langcode": "DE"
+  },
+  {
+    "shortname": "SCH1951",
+    "longname": "Schlachter 1951",
+    "langname": "Deutsch",
+    "langcode": "DE"
+  },
+  {
+    "shortname": "SCH2000",
+    "longname": "Schlachter 2000",
+    "langname": "Deutsch",
+    "langcode": "DE"
+  },
+  {
+    "shortname": "KJ21",
+    "longname": "21st Century King James Version",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "ASV",
+    "longname": "American Standard Version",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "AMP",
+    "longname": "Amplified Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "AMPC",
+    "longname": "Amplified Bible, Classic Edition",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "BRG",
+    "longname": "BRG Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "CSB",
+    "longname": "Christian Standard Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "CSBA",
+    "longname": "Christian Standard Bible Anglicised",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "CEB",
+    "longname": "Common English Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "CJB",
+    "longname": "Complete Jewish Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "CEV",
+    "longname": "Contemporary English Version",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "DARBY",
+    "longname": "Darby Translation",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "DLNT",
+    "longname": "Disciples’ Literal New Testament",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "DRA",
+    "longname": "Douay-Rheims 1899 American Edition",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "ERV",
+    "longname": "Easy-to-Read Version",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "EASY",
+    "longname": "EasyEnglish Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "EHV",
+    "longname": "Evangelical Heritage Version",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "ESV",
+    "longname": "English Standard Version",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "ESVUK",
+    "longname": "English Standard Version Anglicised",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "EXB",
+    "longname": "Expanded Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "GNV",
+    "longname": "1599 Geneva Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "GW",
+    "longname": "GOD’S WORD Translation",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "GNT",
+    "longname": "Good News Translation",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "HCSB",
+    "longname": "Holman Christian Standard Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "ICB",
+    "longname": "International Children’s Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "ISV",
+    "longname": "International Standard Version",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "PHILLIPS",
+    "longname": "J.B. Phillips New Testament",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "JUB",
+    "longname": "Jubilee Bible 2000",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "KJV",
+    "longname": "King James Version",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "AKJV",
+    "longname": "Authorized (King James) Version",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "LSB",
+    "longname": "Legacy Standard Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "LEB",
+    "longname": "Lexham English Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "TLB",
+    "longname": "Living Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "MSG",
+    "longname": "The Message",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "MEV",
+    "longname": "Modern English Version",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "MOUNCE",
+    "longname": "Mounce Reverse Interlinear New Testament",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NOG",
+    "longname": "Names of God Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NABRE",
+    "longname": "New American Bible (Revised Edition)",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NASB",
+    "longname": "New American Standard Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NASB1995",
+    "longname": "New American Standard Bible 1995",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NCB",
+    "longname": "New Catholic Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NCV",
+    "longname": "New Century Version",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NET",
+    "longname": "New English Translation",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NIRV",
+    "longname": "New International Reader's Version",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NIV",
+    "longname": "New International Version",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NIVUK",
+    "longname": "New International Version - UK",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NKJV",
+    "longname": "New King James Version",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NLV",
+    "longname": "New Life Version",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NLT",
+    "longname": "New Living Translation",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NMB",
+    "longname": "New Matthew Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NRSVA",
+    "longname": "New Revised Standard Version, Anglicised",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NRSVACE",
+    "longname": "New Revised Standard Version, Anglicised Catholic Edition",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NRSVCE",
+    "longname": "New Revised Standard Version Catholic Edition",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NRSVUE",
+    "longname": "New Revised Standard Version Updated Edition",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "NTFE",
+    "longname": "New Testament for Everyone",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "OJB",
+    "longname": "Orthodox Jewish Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "RGT",
+    "longname": "Revised Geneva Translation",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "RSV",
+    "longname": "Revised Standard Version",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "RSVCE",
+    "longname": "Revised Standard Version Catholic Edition",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "TLV",
+    "longname": "Tree of Life Version",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "VOICE",
+    "longname": "The Voice",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "WEB",
+    "longname": "World English Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "WE",
+    "longname": "Worldwide English (New Testament)",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "WYC",
+    "longname": "Wycliffe Bible",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "YLT",
+    "longname": "Young's Literal Translation",
+    "langname": "English",
+    "langcode": "EN"
+  },
+  {
+    "shortname": "LBLA",
+    "longname": "La Biblia de las Américas",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "JBS",
+    "longname": "Biblia del Jubileo",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "DHH",
+    "longname": "Dios Habla Hoy",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "NBLA",
+    "longname": "Nueva Biblia de las Américas",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "NBV",
+    "longname": "Nueva Biblia Viva",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "NTV",
+    "longname": "Nueva Traducción Viviente",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "NVI",
+    "longname": "Nueva Versión Internacional",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "CST",
+    "longname": "Nueva Versión Internacional (Castilian)",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "PDT",
+    "longname": "Palabra de Dios para Todos",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "BLP",
+    "longname": "La Palabra (España)",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "BLPH",
+    "longname": "La Palabra (Hispanoamérica)",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "RVA-2015",
+    "longname": "Reina Valera Actualizada",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "RVC",
+    "longname": "Reina Valera Contemporánea",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "RVR1960",
+    "longname": "Reina-Valera 1960",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "RVR1977",
+    "longname": "Reina Valera Revisada",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "RVR1995",
+    "longname": "Reina-Valera 1995",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "RVA",
+    "longname": "Reina-Valera Antigua",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "SRV-BRG",
+    "longname": "Spanish Blue Red and Gold Letter Edition",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "TLA",
+    "longname": "Traducción en lenguaje actual",
+    "langname": "Español",
+    "langcode": "ES"
+  },
+  {
+    "shortname": "R1933",
+    "longname": "Raamattu 1933/38",
+    "langname": "Suomi",
+    "langcode": "FI"
+  },
+  {
+    "shortname": "BDS",
+    "longname": "La Bible du Semeur",
+    "langname": "Français",
+    "langcode": "FR"
+  },
+  {
+    "shortname": "LSG",
+    "longname": "Louis Segond",
+    "langname": "Français",
+    "langcode": "FR"
+  },
+  {
+    "shortname": "NEG1979",
+    "longname": "Nouvelle Edition de Genève – NEG1979",
+    "langname": "Français",
+    "langcode": "FR"
+  },
+  {
+    "shortname": "SG21",
+    "longname": "Segond 21",
+    "langname": "Français",
+    "langcode": "FR"
+  },
+  {
+    "shortname": "TR1550",
+    "longname": "1550 Stephanus New Testament",
+    "langname": "Κοινη",
+    "langcode": "GRC"
+  },
+  {
+    "shortname": "WHNU",
+    "longname": "1881 Westcott-Hort New Testament",
+    "langname": "Κοινη",
+    "langcode": "GRC"
+  },
+  {
+    "shortname": "TR1894",
+    "longname": "1894 Scrivener New Testament",
+    "langname": "Κοινη",
+    "langcode": "GRC"
+  },
+  {
+    "shortname": "SBLGNT",
+    "longname": "SBL Greek New Testament",
+    "langname": "Κοινη",
+    "langcode": "GRC"
+  },
+  {
+    "shortname": "THGNT",
+    "longname": "Tyndale House Greek New Testament",
+    "langname": "Κοινη",
+    "langcode": "GRC"
+  },
+  {
+    "shortname": "GERV",
+    "longname": "Gujarati: પવિત્ર બાઈબલ",
+    "langname": "ગુજરાતી",
+    "langcode": "GU"
+  },
+  {
+    "shortname": "HHH",
+    "longname": "Habrit Hakhadasha/Haderekh",
+    "langname": "עברית",
+    "langcode": "HE"
+  },
+  {
+    "shortname": "WLC",
+    "longname": "The Westminster Leningrad Codex",
+    "langname": "עברית",
+    "langcode": "HE"
+  },
+  {
+    "shortname": "ERV-HI",
+    "longname": "Hindi Bible: Easy-to-Read Version",
+    "langname": "हिन्दी",
+    "langcode": "HI"
+  },
+  {
+    "shortname": "SHB",
+    "longname": "Saral Hindi Bible",
+    "langname": "हिन्दी",
+    "langcode": "HI"
+  },
+  {
+    "shortname": "HLGN",
+    "longname": "Ang Pulong Sang Dios",
+    "langname": "Ilonggo",
+    "langcode": "HIL"
+  },
+  {
+    "shortname": "NCA",
+    "longname": "New Chhattisgarhi Translation (नवां नियम छत्तीसगढ़ी)",
+    "langname": "Chhattisgarhi",
+    "langcode": "HNE"
+  },
+  {
+    "shortname": "SHP",
+    "longname": "Biblija: suvremeni hrvatski prijevod",
+    "langname": "Hrvatski",
+    "langcode": "HR"
+  },
+  {
+    "shortname": "HNZ-RI",
+    "longname": "Hrvatski Novi Zavjet – Rijeka 2001",
+    "langname": "Hrvatski",
+    "langcode": "HR"
+  },
+  {
+    "shortname": "CRO",
+    "longname": "Knijga O Kristu",
+    "langname": "Hrvatski",
+    "langcode": "HR"
+  },
+  {
+    "shortname": "HCV",
+    "longname": "Haitian Creole Version",
+    "langname": "Kreyòl ayisyen",
+    "langcode": "HT"
+  },
+  {
+    "shortname": "VKF",
+    "longname": "Nouvo Testaman: Vèsyon Kreyòl Fasil",
+    "langname": "Kreyòl ayisyen",
+    "langcode": "HT"
+  },
+  {
+    "shortname": "KAR",
+    "longname": "Hungarian Károli",
+    "langname": "Magyar",
+    "langcode": "HU"
+  },
+  {
+    "shortname": "ERV-HU",
+    "longname": "Hungarian Bible: Easy-to-Read Version",
+    "langname": "Magyar",
+    "langcode": "HU"
+  },
+  {
+    "shortname": "NT-HU",
+    "longname": "Hungarian New Translation",
+    "langname": "Magyar",
+    "langcode": "HU"
+  },
+  {
+    "shortname": "HWP",
+    "longname": "Hawai‘i Pidgin",
+    "langname": "Hawai‘i Pidgin",
+    "langcode": "HWC"
+  },
+  {
+    "shortname": "AMD",
+    "longname": "Alkitab Mudah Dibaca",
+    "langname": "Indonesia, bahasa",
+    "langcode": "ID"
+  },
+  {
+    "shortname": "ICELAND",
+    "longname": "Icelandic Bible",
+    "langname": "Íslenska",
+    "langcode": "IS"
+  },
+  {
+    "shortname": "BDG",
+    "longname": "La Bibbia della Gioia",
+    "langname": "Italiano",
+    "langcode": "IT"
+  },
+  {
+    "shortname": "CEI",
+    "longname": "Conferenza Episcopale Italiana",
+    "langname": "Italiano",
+    "langcode": "IT"
+  },
+  {
+    "shortname": "LND",
+    "longname": "La Nuova Diodati",
+    "langname": "Italiano",
+    "langcode": "IT"
+  },
+  {
+    "shortname": "NR1994",
+    "longname": "Nuova Riveduta 1994",
+    "langname": "Italiano",
+    "langcode": "IT"
+  },
+  {
+    "shortname": "NR2006",
+    "longname": "Nuova Riveduta 2006",
+    "langname": "Italiano",
+    "langcode": "IT"
+  },
+  {
+    "shortname": "JERV",
+    "longname": "Japanese Bible: Easy-to-Read Version",
+    "langname": "日本語",
+    "langcode": "JA"
+  },
+  {
+    "shortname": "JLB",
+    "longname": "Japanese Living Bible",
+    "langname": "日本語",
+    "langcode": "JA"
+  },
+  {
+    "shortname": "JAC",
+    "longname": "Jacalteco, Oriental",
+    "langname": "Jacalteco, Oriental",
+    "langcode": "JAC"
+  },
+  {
+    "shortname": "KEK",
+    "longname": "Kekchi",
+    "langname": "Kekchi",
+    "langcode": "KEK"
+  },
+  {
+    "shortname": "KERV",
+    "longname": "Kannada Holy Bible: Easy-to-Read Version",
+    "langname": "ಕನ್ನಡ",
+    "langcode": "KN"
+  },
+  {
+    "shortname": "KOERV",
+    "longname": "Korean Bible: Easy-to-Read Version",
+    "langname": "한국어",
+    "langcode": "KO"
+  },
+  {
+    "shortname": "KLB",
+    "longname": "Korean Living Bible",
+    "langname": "한국어",
+    "langcode": "KO"
+  },
+  {
+    "shortname": "VULGATE",
+    "longname": "Biblia Sacra Vulgata",
+    "langname": "Latina",
+    "langcode": "LA"
+  },
+  {
+    "shortname": "LCB",
+    "longname": "Endagaano Enkadde nʼEndagaano Empya",
+    "langname": "Luganda",
+    "langcode": "LG"
+  },
+  {
+    "shortname": "MAORI",
+    "longname": "Maori Bible",
+    "langname": "Māori",
+    "langcode": "MI"
+  },
+  {
+    "shortname": "MNT",
+    "longname": "Macedonian New Testament",
+    "langname": "Македонски",
+    "langcode": "MK"
+  },
+  {
+    "shortname": "ERV-MR",
+    "longname": "Marathi Bible: Easy-to-Read Version",
+    "langname": "मराठी",
+    "langcode": "MR"
+  },
+  {
+    "shortname": "MVC",
+    "longname": "Mam, Central",
+    "langname": "Mam, Central",
+    "langcode": "MVC"
+  },
+  {
+    "shortname": "MVJ",
+    "longname": "Mam de Todos Santos Chuchumatán",
+    "langname": "Mam, Todos Santos",
+    "langcode": "MVJ"
+  },
+  {
+    "shortname": "REIMER",
+    "longname": "Reimer 2001",
+    "langname": "Plautdietsch",
+    "langcode": "NDS"
+  },
+  {
+    "shortname": "ERV-NE",
+    "longname": "Nepali Bible: Easy-to-Read Version",
+    "langname": "नेपाली",
+    "langcode": "NE"
+  },
+  {
+    "shortname": "NGU",
+    "longname": "Náhuatl de Guerrero",
+    "langname": "Náhuatl de Guerrero",
+    "langcode": "NGU"
+  },
+  {
+    "shortname": "BB",
+    "longname": "BasisBijbel",
+    "langname": "Nederlands",
+    "langcode": "NL"
+  },
+  {
+    "shortname": "HTB",
+    "longname": "Het Boek",
+    "langname": "Nederlands",
+    "langcode": "NL"
+  },
+  {
+    "shortname": "DNB1930",
+    "longname": "Det Norsk Bibelselskap 1930",
+    "langname": "Norsk",
+    "langcode": "NO"
+  },
+  {
+    "shortname": "LB",
+    "longname": "En Levende Bok",
+    "langname": "Norsk",
+    "langcode": "NO"
+  },
+  {
+    "shortname": "CCL",
+    "longname": "Mawu a Mulungu mu Chichewa Chalero",
+    "langname": "Chichewa",
+    "langcode": "NY"
+  },
+  {
+    "shortname": "ERV-OR",
+    "longname": "Odia Holy Bible: Easy-to-Read Version",
+    "langname": "ଓଡ଼ିଆ",
+    "langcode": "OR"
+  },
+  {
+    "shortname": "ERV-PA",
+    "longname": "Punjabi Bible: Easy-to-Read Version",
+    "langname": "ਪੰਜਾਬੀ",
+    "langcode": "PA"
+  },
+  {
+    "shortname": "NP",
+    "longname": "Nowe Przymierze",
+    "langname": "Polski",
+    "langcode": "PL"
+  },
+  {
+    "shortname": "SZ-PL",
+    "longname": "Słowo Życia",
+    "langname": "Polski",
+    "langcode": "PL"
+  },
+  {
+    "shortname": "UBG",
+    "longname": "Updated Gdańsk Bible",
+    "langname": "Polski",
+    "langcode": "PL"
+  },
+  {
+    "shortname": "NBTN",
+    "longname": "Ne Bibliaj Tik Nawat",
+    "langname": "Nawat",
+    "langcode": "PPL"
+  },
+  {
+    "shortname": "ARC",
+    "longname": "Almeida Revista e Corrigida 2009",
+    "langname": "Português",
+    "langcode": "PT"
+  },
+  {
+    "shortname": "VFL",
+    "longname": "Portuguese New Testament: Easy-to-Read Version",
+    "langname": "Português",
+    "langcode": "PT"
+  },
+  {
+    "shortname": "NTLH",
+    "longname": "Nova Traduҫão na Linguagem de Hoje 2000",
+    "langname": "Português",
+    "langcode": "PT"
+  },
+  {
+    "shortname": "NVT",
+    "longname": "Nova Versão Transformadora",
+    "langname": "Português",
+    "langcode": "PT"
+  },
+  {
+    "shortname": "NVI-PT",
+    "longname": "Nova Versão Internacional",
+    "langname": "Português",
+    "langcode": "PT"
+  },
+  {
+    "shortname": "OL",
+    "longname": "O Livro",
+    "langname": "Português",
+    "langcode": "PT"
+  },
+  {
+    "shortname": "MTDS",
+    "longname": "Mushuj Testamento Diospaj Shimi",
+    "langname": "Quichua",
+    "langcode": "QU"
+  },
+  {
+    "shortname": "QUT",
+    "longname": "Quiché, Centro Occidental",
+    "langname": "Quiché, Centro Occidenta",
+    "langcode": "QUT"
+  },
+  {
+    "shortname": "RMNN",
+    "longname": "Cornilescu 1924 - Revised 2010, 2014",
+    "langname": "Română",
+    "langcode": "RO"
+  },
+  {
+    "shortname": "NTLR",
+    "longname": "Nouă Traducere În Limba Română",
+    "langname": "Română",
+    "langcode": "RO"
+  },
+  {
+    "shortname": "NRT",
+    "longname": "New Russian Translation",
+    "langname": "Русский",
+    "langcode": "RU"
+  },
+  {
+    "shortname": "CARS",
+    "longname": "Священное Писание (Восточный Перевод)",
+    "langname": "Русский",
+    "langcode": "RU"
+  },
+  {
+    "shortname": "CARST",
+    "longname": "Священное Писание (Восточный перевод), версия для Таджикистана",
+    "langname": "Русский",
+    "langcode": "RU"
+  },
+  {
+    "shortname": "CARSA",
+    "longname": "Священное Писание (Восточный перевод), версия с «Аллахом»",
+    "langname": "Русский",
+    "langcode": "RU"
+  },
+  {
+    "shortname": "ERV-RU",
+    "longname": "Russian New Testament: Easy-to-Read Version",
+    "langname": "Русский",
+    "langcode": "RU"
+  },
+  {
+    "shortname": "RUSV",
+    "longname": "Russian Synodal Version",
+    "langname": "Русский",
+    "langcode": "RU"
+  },
+  {
+    "shortname": "NPK",
+    "longname": "Nádej pre kazdého",
+    "langname": "Slovenčina",
+    "langcode": "SK"
+  },
+  {
+    "shortname": "SOM",
+    "longname": "Somali Bible",
+    "langname": "Somali",
+    "langcode": "SO"
+  },
+  {
+    "shortname": "ALB",
+    "longname": "Albanian Bible",
+    "langname": "Shqip",
+    "langcode": "SQ"
+  },
+  {
+    "shortname": "NSP",
+    "longname": "New Serbian Translation",
+    "langname": "Српски",
+    "langcode": "SR"
+  },
+  {
+    "shortname": "ERV-SR",
+    "longname": "Serbian New Testament: Easy-to-Read Version",
+    "langname": "Српски",
+    "langcode": "SR"
+  },
+  {
+    "shortname": "NUB",
+    "longname": "nuBibeln (Swedish Contemporary Bible)",
+    "langname": "Svenska",
+    "langcode": "SV"
+  },
+  {
+    "shortname": "SV1917",
+    "longname": "Svenska 1917",
+    "langname": "Svenska",
+    "langcode": "SV"
+  },
+  {
+    "shortname": "SFB",
+    "longname": "Svenska Folkbibeln",
+    "langname": "Svenska",
+    "langcode": "SV"
+  },
+  {
+    "shortname": "SFB15",
+    "longname": "Svenska Folkbibeln 2015",
+    "langname": "Svenska",
+    "langcode": "SV"
+  },
+  {
+    "shortname": "SVL",
+    "longname": "Swedish New Living Bible (Nya Levande Bibeln)",
+    "langname": "Svenska",
+    "langcode": "SV"
+  },
+  {
+    "shortname": "TKU",
+    "longname": "Agano Jipya: Tafsiri ya Kusoma-Kwa-Urahisi",
+    "langname": "Kiswahili",
+    "langcode": "SW"
+  },
+  {
+    "shortname": "SNT",
+    "longname": "Neno: Bibilia Takatifu",
+    "langname": "Kiswahili",
+    "langcode": "SW"
+  },
+  {
+    "shortname": "ERV-TA",
+    "longname": "Tamil Bible: Easy-to-Read Version",
+    "langname": "தமிழ்",
+    "langcode": "TA"
+  },
+  {
+    "shortname": "TERV",
+    "longname": "Telugu Holy Bible: Easy-to-Read Version",
+    "langname": "తెలుగు",
+    "langcode": "TE"
+  },
+  {
+    "shortname": "NTV-BIBLE",
+    "longname": "New Thai Version",
+    "langname": "ภาษาไทย",
+    "langcode": "TH"
+  },
+  {
+    "shortname": "ERV-TH",
+    "longname": "Thai New Testament: Easy-to-Read Version",
+    "langname": "ภาษาไทย",
+    "langcode": "TH"
+  },
+  {
+    "shortname": "TNCV",
+    "longname": "Thai New Contemporary Bible",
+    "langname": "ภาษาไทย",
+    "langcode": "TH"
+  },
+  {
+    "shortname": "FSV",
+    "longname": "Ang Bagong Tipan: Filipino Standard Version",
+    "langname": "Tagalog",
+    "langcode": "TL"
+  },
+  {
+    "shortname": "ABTAG1978",
+    "longname": "Ang Biblia (1978)",
+    "langname": "Tagalog",
+    "langcode": "TL"
+  },
+  {
+    "shortname": "ABTAG2001",
+    "longname": "Ang Biblia, 2001",
+    "langname": "Tagalog",
+    "langcode": "TL"
+  },
+  {
+    "shortname": "ADB1905",
+    "longname": "Ang Dating Biblia (1905)",
+    "langname": "Tagalog",
+    "langcode": "TL"
+  },
+  {
+    "shortname": "SND",
+    "longname": "Ang Salita ng Diyos",
+    "langname": "Tagalog",
+    "langcode": "TL"
+  },
+  {
+    "shortname": "ASND",
+    "longname": "Ang Salita ng Dios (Tagalog Contemporary Bible)",
+    "langname": "Tagalog",
+    "langcode": "TL"
+  },
+  {
+    "shortname": "MBBTAG",
+    "longname": "Magandang Balita Biblia",
+    "langname": "Tagalog",
+    "langcode": "TL"
+  },
+  {
+    "shortname": "MBBTAG-DC",
+    "longname": "Magandang Balita Biblia (with Deuterocanon)",
+    "langname": "Tagalog",
+    "langcode": "TL"
+  },
+  {
+    "shortname": "NA-TWI",
+    "longname": "Nkwa Asem",
+    "langname": "Twi",
+    "langcode": "TWI"
+  },
+  {
+    "shortname": "UKR",
+    "longname": "Ukrainian Bible",
+    "langname": "Українська",
+    "langcode": "UK"
+  },
+  {
+    "shortname": "ERV-UK",
+    "longname": "Ukrainian Bible: Easy-to-Read Version",
+    "langname": "Українська",
+    "langcode": "UK"
+  },
+  {
+    "shortname": "ERV-UR",
+    "longname": "Urdu Bible: Easy-to-Read Version",
+    "langname": "اردو",
+    "langcode": "UR"
+  },
+  {
+    "shortname": "USP",
+    "longname": "Uspanteco",
+    "langname": "Uspanteco",
+    "langcode": "USP"
+  },
+  {
+    "shortname": "BD2011",
+    "longname": "Bản Dịch 2011",
+    "langname": "Tiêng Viêt",
+    "langcode": "VI"
+  },
+  {
+    "shortname": "NVB",
+    "longname": "New Vietnamese Bible",
+    "langname": "Tiêng Viêt",
+    "langcode": "VI"
+  },
+  {
+    "shortname": "BPT",
+    "longname": "Vietnamese Bible: Easy-to-Read Version",
+    "langname": "Tiêng Viêt",
+    "langcode": "VI"
+  },
+  {
+    "shortname": "BYO",
+    "longname": "Bíbélì Mímọ́ Yorùbá Òde Òn",
+    "langname": "Yorùbá",
+    "langcode": "YO"
+  },
+  {
+    "shortname": "CCB",
+    "longname": "Chinese Contemporary Bible (Simplified)",
+    "langname": "汉语",
+    "langcode": "ZH"
+  },
+  {
+    "shortname": "CCBT",
+    "longname": "Chinese Contemporary Bible (Traditional)",
+    "langname": "汉语",
+    "langcode": "ZH"
+  },
+  {
+    "shortname": "ERV-ZH",
+    "longname": "Chinese New Testament: Easy-to-Read Version",
+    "langname": "汉语",
+    "langcode": "ZH"
+  },
+  {
+    "shortname": "CNVS",
+    "longname": "Chinese New Version (Simplified)",
+    "langname": "汉语",
+    "langcode": "ZH"
+  },
+  {
+    "shortname": "CNVT",
+    "longname": "Chinese New Version (Traditional)",
+    "langname": "汉语",
+    "langcode": "ZH"
+  },
+  {
+    "shortname": "CSBS",
+    "longname": "Chinese Standard Bible (Simplified)",
+    "langname": "汉语",
+    "langcode": "ZH"
+  },
+  {
+    "shortname": "CSBT",
+    "longname": "Chinese Standard Bible (Traditional)",
+    "langname": "汉语",
+    "langcode": "ZH"
+  },
+  {
+    "shortname": "CUVS",
+    "longname": "Chinese Union Version (Simplified)",
+    "langname": "汉语",
+    "langcode": "ZH"
+  },
+  {
+    "shortname": "CUV",
+    "longname": "Chinese Union Version (Traditional)",
+    "langname": "汉语",
+    "langcode": "ZH"
+  },
+  {
+    "shortname": "CUVMPS",
+    "longname": "Chinese Union Version Modern Punctuation (Simplified)",
+    "langname": "汉语",
+    "langcode": "ZH"
+  },
+  {
+    "shortname": "CUVMPT",
+    "longname": "Chinese Union Version Modern Punctuation (Traditional)",
+    "langname": "汉语",
+    "langcode": "ZH"
+  },
+  {
+    "shortname": "RCU17SS",
+    "longname": "Revised Chinese Union Version (Simplified Script) Shen Edition",
+    "langname": "汉语",
+    "langcode": "ZH"
+  },
+  {
+    "shortname": "RCU17TS",
+    "longname": "Revised Chinese Union Version (Traditional Script) Shen Edition",
+    "langname": "汉语",
+    "langcode": "ZH"
+  }
+]
